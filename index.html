@@ -324,25 +324,28 @@ let activeCategory = '2digits'; // ค่าเริ่มต้น: เลข�
 // --- 2. ฟังก์ชันดึงข้อมูลจาก Open API (RayRiffy Lottery API) อัตโนมัติ ---
 // --- ฟังก์ชันดึงข้อมูลจาก Open API (พร้อมระบบทะลุบล็อก CORS) ---
 // --- ฟังก์ชันดึงข้อมูลแบบ Multi-Proxy (สลับตัวกลางให้อัตโนมัติหากตัวแรกช้า) ---
+// --- ฟังก์ชันดึงข้อมูลล็อตเตอรี่สด ทะลุการบล็อก CORS ของ API ---
 async function fetchLiveLotteryData() {
     const statusBar = document.getElementById('status-bar');
     const targetUrl = 'https://lotto.api.rayriffy.com/list/1';
     
-    // รายชื่อ Proxy ตัวกลาง 3 เจ้ากันล่ม
+    // ใช้ Proxy ตัวกลางที่รองรับ CORS บน GitHub Pages ได้แน่นอน
     const proxyList = [
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-        targetUrl // ดึงตรงๆ เป็นทางเลือกสุดท้าย
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
     ];
+
+    statusBar.innerHTML = `สถานะการเชื่อมต่อ: <span style="color:#f1c40f;">● กำลังเชื่อมต่อฐานข้อมูล...</span>`;
 
     let success = false;
 
-    for (const url of proxyList) {
+    for (const proxyUrl of proxyList) {
         try {
-            const response = await fetch(url);
+            const response = await fetch(proxyUrl);
             if (!response.ok) continue;
 
             const json = await response.json();
+            
             if (json && json.response && json.response.length > 0) {
                 currentData = json.response.map(item => ({
                     date: item.date,
@@ -351,12 +354,14 @@ async function fetchLiveLotteryData() {
                     threeBack: item.running3Back || ["───", "───"],
                     twoBack: item.running2Back || "──"
                 }));
+
                 statusBar.innerHTML = `สถานะการเชื่อมต่อ: <span class="status-online">● อัปเดตข้อมูลล่าสุดจาก Server เรียบร้อย</span>`;
                 success = true;
-                break; // สำเร็จแล้วออกจาก Loop
+                console.log("✅ ดึงข้อมูลสำเร็จผ่าน:", proxyUrl);
+                break;
             }
-        } catch (e) {
-            console.warn(`Proxy ${url} ล้มเหลว กำลังลองตัวถัดไป...`);
+        } catch (err) {
+            console.warn(`Proxy ${proxyUrl} ไม่สำเร็จ กำลังลองตัวถัดไป...`);
         }
     }
 
@@ -365,8 +370,7 @@ async function fetchLiveLotteryData() {
     }
 
     updateUI();
-}    
-
+}
 
 // --- 3. ฟังก์ชันสลับหมวดหมู่ ---
 function switchCategory(cat) {
