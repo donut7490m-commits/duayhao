@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "response": [
+    {
+      "date": "16 มี.ค. 2026",
+      "running": ["682904"],
+      "running3Front": ["241", "730"],
+      "running3Back": ["583", "912"],
+      "running2Back": "89"
+    }
+  ]
+}
