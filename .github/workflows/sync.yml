@@ -1,54 +1,38 @@
-name: Sync Lottery Data Automatically
+name: Auto Sync Lottery Every Draw Date
 
 on:
   schedule:
-    - cron: '0 0,12 * * *' # ดึงข้อมูลอัตโนมัติทุก 12 ชั่วโมง
-  workflow_dispatch: # กดสั่งดึงข้อมูลเองได้ตลอดเวลา
+    # ตั้งเวลาให้บอททำงานอัตโนมัติทุกวันที่ 1 และ 16 ของเดือน เวลา 16:30 น. (ไทย)
+    - cron: '30 9 1,16 * *'
+  workflow_dispatch: # ปล่อยให้กดปุ่มสั่งรันเองได้ด้วย
 
 permissions:
   contents: write
 
 jobs:
-  sync-data:
+  auto-fetch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Fetch Latest Lottery Data
-        run: |
-          node -e '
-          const fs = require("fs");
-          async function fetchData() {
-            const urls = [
-              "https://lotto.api.rayriffy.com/list/1",
-              "https://raw.githubusercontent.com/rayriffy/thai-lottery-api/gh-pages/lotto.json"
-            ];
-            for (const url of urls) {
-              try {
-                console.log("Fetching from:", url);
-                const res = await fetch(url, {
-                  headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
-                });
-                if (res.ok) {
-                  const data = await res.text();
-                  fs.writeFileSync("data.json", data);
-                  console.log("✅ Saved data.json successfully!");
-                  return;
-                }
-              } catch (err) {
-                console.log("❌ Failed:", err.message);
-              }
-            }
-            process.exit(1);
-          }
-          fetchData();
-          '
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-      - name: Commit and Push if Changed
+      - name: Install Dependencies
+        run: |
+          pip install beautifulsoup4 requests
+
+      - name: Run Scraper Bot
+        run: |
+          python sync_lottery.py
+
+      - name: Commit and Push if New Data Found
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git diff --staged --quiet || git commit -m "Auto-update lottery data.json"
+          git diff --staged --quiet || git commit -m "Auto-updated lottery draw data"
           git push
