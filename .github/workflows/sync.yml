@@ -5,7 +5,6 @@ on:
     - cron: '0 0,12 * * *' # ดึงข้อมูลอัตโนมัติทุก 12 ชั่วโมง
   workflow_dispatch: # กดสั่งดึงข้อมูลเองได้ตลอดเวลา
 
-# ให้สิทธิ์บอทบันทึกไฟล์ลง Repository ได้
 permissions:
   contents: write
 
@@ -18,7 +17,33 @@ jobs:
 
       - name: Fetch Latest Lottery Data
         run: |
-          curl -sL --retry 5 --retry-delay 2 "https://lotto.api.rayriffy.com/list/1" -o data.json
+          node -e '
+          const fs = require("fs");
+          async function fetchData() {
+            const urls = [
+              "https://lotto.api.rayriffy.com/list/1",
+              "https://raw.githubusercontent.com/rayriffy/thai-lottery-api/gh-pages/lotto.json"
+            ];
+            for (const url of urls) {
+              try {
+                console.log("Fetching from:", url);
+                const res = await fetch(url, {
+                  headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
+                });
+                if (res.ok) {
+                  const data = await res.text();
+                  fs.writeFileSync("data.json", data);
+                  console.log("✅ Saved data.json successfully!");
+                  return;
+                }
+              } catch (err) {
+                console.log("❌ Failed:", err.message);
+              }
+            }
+            process.exit(1);
+          }
+          fetchData();
+          '
 
       - name: Commit and Push if Changed
         run: |
