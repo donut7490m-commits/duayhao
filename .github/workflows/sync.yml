@@ -5,16 +5,20 @@ on:
     - cron: '0 0,12 * * *' # ดึงข้อมูลอัตโนมัติทุก 12 ชั่วโมง
   workflow_dispatch: # กดสั่งดึงข้อมูลเองได้ตลอดเวลา
 
+# ให้สิทธิ์บอทบันทึกไฟล์ลง Repository ได้
+permissions:
+  contents: write
+
 jobs:
   sync-data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Fetch Latest Lottery Data
         run: |
-          curl -s "https://lotto.api.rayriffy.com/list/1" > data.json
+          curl -sL --retry 5 --retry-delay 2 "https://lotto.api.rayriffy.com/list/1" -o data.json
 
       - name: Commit and Push if Changed
         run: |
