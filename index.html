@@ -371,6 +371,7 @@ function getCategoryNumbers(item) {
 }
 
 // --- 5. อัลกอริทึมแบบจำลองสถิติ 20 รูปแบบ (Dynamic 20 Predictions) ---
+// --- 5. อัลกอริทึมแบบจำลองสถิติ 20 รูปแบบ (Dynamic 20 Predictions - ปรับจำนวนหลักตามหมวดหมู่) ---
 function generate20Predictions() {
     const allNumbers = [];
     currentData.forEach(item => {
@@ -391,8 +392,26 @@ function generate20Predictions() {
     const d0 = sortedDigits[0] || '0';
     const d1 = sortedDigits[1] || '1';
     const d2 = sortedDigits[2] || '2';
+    const d3 = sortedDigits[3] || '3';
+    const d4 = sortedDigits[4] || '4';
+    const d5 = sortedDigits[5] || '5';
     const dLast = sortedDigits[sortedDigits.length - 1] || '9';
     const dSecLast = sortedDigits[sortedDigits.length - 2] || '8';
+
+    // ปรับรูปแบบชุดตัวเลขทำนายตามหมวดหมู่ที่เลือก
+    let compositeNumber = `${d0}${d1}`;
+    let ensembleNumber = `${d0}${d1}`;
+
+    if (activeCategory === '2digits') {
+        compositeNumber = `${d0}${d1}`;
+        ensembleNumber = `${d0}${d1}`;
+    } else if (activeCategory === '3digits') {
+        compositeNumber = `${d0}${d1}`;
+        ensembleNumber = `${d0}${d1}${d2}`;
+    } else if (activeCategory === '6digits') {
+        compositeNumber = `${d0}${d1}${d2}`;
+        ensembleNumber = `${d0}${d1}${d2}${d3}${d4}${d5}`;
+    }
 
     return [
         { title: "1. ความถี่สูงสุด (High Frequency)", val: `ตัวเลขเด่น: ${d0}`, desc: `ปรากฏทั้งหมด ${digitCounts[d0]} ครั้งในชุดสถิติย้อนหลัง` },
@@ -404,7 +423,7 @@ function generate20Predictions() {
         { title: "7. ค่าเฉลี่ยผลรวม (Mean Sum Value)", val: getAverageSum(allNumbers), desc: "ค่าเฉลี่ยเลขคณิตของผลรวมตัวเลขทุกหลักในหมวดหมู่" },
         { title: "8. แนวโน้มลูกโซ่ (Markov Chain)", val: getMarkovNext(allNumbers), desc: "การคาดการณ์ตัวเลขสืบเนื่องจากผลการออกรางวัลงวดล่าสุด" },
         { title: "9. ถ่วงน้ำหนักระยะใกล้ (Recency Weighted)", val: getWeightedRecent(allNumbers), desc: "ให้ดัชนีน้ำหนักความสำคัญแก่ข้อมูลสถิติงวดล่าสุดสูงสุด" },
-        { title: "10. การประมวลผลรวม (Composite Model)", val: `แนวทางเด่น: ${d0}${d1}`, desc: "การจับคู่โครงสร้างตัวเลขที่มีดัชนีความน่าจะเป็นสูงสุด" },
+        { title: "10. การประมวลผลรวม (Composite Model)", val: `แนวทางเด่น: ${compositeNumber}`, desc: "การจับคู่โครงสร้างตัวเลขที่มีดัชนีความน่าจะเป็นสูงสุด" },
         { title: "11. อัตราเร่ง 3 งวดล่าสุด (Short-Term Momentum)", val: getShortTermMomentum(allNumbers), desc: "วิเคราะห์อัตราเร่งความถี่เฉพาะสถิติ 3 งวดล่าสุด" },
         { title: "12. ดัชนีตัวเลขหมุนเวียนต่ำ (Absolute Cold Digit)", val: `ตัวเลขดับ: ${dSecLast}`, desc: "ตัวเลขที่มีอัตราการหมุนเวียนปรากฏต่ำในลำดับรอง" },
         { title: "13. การจับคู่ความถี่สูง (Top Pair Frequency)", val: `ชุดคู่เด่น: ${d0}-${d2}`, desc: "การจับคู่ระหว่างตัวเลขความถี่อันดับ 1 และอันดับ 3" },
@@ -414,7 +433,7 @@ function generate20Predictions() {
         { title: "17. การแจกแจงปัวซซง (Poisson Expected)", val: `ค่าคาดหมาย: ${d1}`, desc: "ตัวเลขที่มีค่าคาดหมายการกระจายตัวเข้าสู่จุดสมดุล" },
         { title: "18. ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)", val: getStdDevRange(allNumbers), desc: "ขอบเขตส่วนเบี่ยงเบนมาตรฐานของผลรวมตัวเลข" },
         { title: "19. รอบวัฏจักรซ้ำ (Cyclic Repeat Trend)", val: `แนวโน้มซ้ำ: ${d0}`, desc: "ประเมินตัวเลขที่มีโอกาสปรากฏซ้ำตามรอบวัฏจักร" },
-        { title: "20. แบบจำลองสถิติรวม (Ensemble Meta-Model)", val: `ชุดสรุป: ${d0}${d1}${d2}`, desc: "การประมวลผลร่วมจากแบบจำลองเพื่อโครงสร้างตัวเลขที่ดีที่สุด" }
+        { title: "20. แบบจำลองสถิติรวม (Ensemble Meta-Model)", val: `ชุดสรุป: ${ensembleNumber}`, desc: "การประมวลผลร่วมจากแบบจำลองเพื่อโครงสร้างตัวเลขที่ดีที่สุด" }
     ];
 }
 
