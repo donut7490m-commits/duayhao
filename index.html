@@ -332,14 +332,17 @@ async function fetchLiveLotteryData() {
         if (!response.ok) throw new Error('ไม่พบไฟล์ data.json ในระบบ');
 
         const json = await response.json();
+        
+        // รองรับทั้งโครงสร้างแบบ history และ response
+        const list = json.history || json.response;
 
-        if (json && json.response && json.response.length > 0) {
-            currentData = json.response.map(item => ({
+        if (list && list.length > 0) {
+            currentData = list.map(item => ({
                 date: item.date,
-                first: item.running[0] || "──────",
-                threeFront: item.running3Front || ["───", "───"],
-                threeBack: item.running3Back || ["───", "───"],
-                twoBack: item.running2Back || "──"
+                first: item.first_prize || (item.running ? item.running[0] : "──────"),
+                threeFront: item.front_three || item.running3Front || ["───", "───"],
+                threeBack: item.last_three || item.running3Back || ["───", "───"],
+                twoBack: item.last_two || item.running2Back || "──"
             }));
 
             statusBar.innerHTML = `สถานะระบบ: <span class="status-online">● เชื่อมต่อและดึงข้อมูลสถิติล่าสุดสมบูรณ์</span>`;
