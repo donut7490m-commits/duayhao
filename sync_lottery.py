@@ -1,98 +1,91 @@
 import json
+import time
 import requests
 
 
-def main():
-    print("🚀 กำลังดึงข้อมูลสถิติสลากกินแบ่งรัฐบาลย้อนหลัง 5 ปี (120 งวด)...")
-
-    # ใส่ User-Agent เพื่อป้องกันโดนเซิร์ฟเวอร์ API บล็อก
+def fetch_lottery_data(target_draws=48):
+    # ปลอมแปลง User-Agent เพื่อป้องกันเซิร์ฟเวอร์ปฏิเสธการเชื่อมต่อ
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            " (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        )
+            " (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json",
     }
 
-    all_draws = []
-    for page in range(1, 9):
-        list_url = f"https://lotto.api.rayriffy.com/list/{page}"
+    history = []
+    page = 1
+
+    # ดึงข้อมูลย้อนหลัง 2 ปี (ประมาณ 48-50 งวด)
+    while len(history) < target_draws and page <= 6:
+        url = f"https://lotto.api.rayriffy.com/list/{page}"
         try:
-            res = requests.get(list_url, headers=headers, timeout=10)
-            if res.status_code == 200:
-                draws = res.json().get("response", [])
-                all_draws.extend(draws)
-            else:
-                print(f"⚠️ หน้า {page} ตอบกลับด้วย Status: {res.status_code}")
+            res = requests.get(url, headers=headers, timeout=10)
+            if res.status_code != 200:
+                print(f"Page {page} HTTP Status: {res.status_code}")
                 break
-        except Exception as e:
-            print(f"❌ เกิดข้อผิดพลาดในหน้า {page}: {e}")
-            break
 
-    print(f"📦 รวมรายการงวดที่พบทั้งหมด: {len(all_draws)} งวด")
+            records = res.json().get("response", [])
+            if not records:
+                break
 
-    lottery_history = []
-    total_draws = min(len(all_draws), 120)
+            for item in records:
+                draw_id = item.get("id")
+                detail_url = f"https://lotto.api.rayriffy.com/get/{draw_id}"
+                detail_res = requests.get(
+                    detail_url, headers=headers, timeout=10
+                )
 
-    for index, draw in enumerate(all_draws[:total_draws]):
-        draw_id = draw.get("id")
-        detail_url = f"https://lotto.api.rayriffy.com/lotto/{draw_id}"
+                if detail_res.status_code == 200:
+                    detail = detail_res.json().get("response", {})
 
-        try:
-            res = requests.get(detail_url, headers=headers, timeout=10)
-            if res.status_code == 200:
-                data = res.json().get("response", {})
-                prizes = data.get("prizes", [])
+                    # ดึงรางวัลที่ 1
+                    p1 = detail.get("prizes", [{}])[0].get("number", [""])[0]
 
-                first_prize = ""
-                last_two = ""
-                front_three = []
-                last_three = []
+                    # ดึงเลขหน้า-เลขท้าย
+                    p2 = detail.get("runningNumbers", [])
+                    front_three, last_three, last_two = [], [], ""
 
-                for item in prizes:
-                    p_id = item.get("id")
-                    num_list = item.get("number", [])
+                    for r in p2:
+                        if r.get("id") == "runningNumberFrontThree":
+                            front_three = r.get("number", [])
+                        elif r.get("id") == "runningNumberBackThree":
+                            last_three = r.get("number", [])
+                        elif r.get("id") == "runningNumberBackTwo":
+                            nums = r.get("number", [])
+                            last_two = nums[0] if nums else ""
 
-                    if p_id == "prizeFirst" and num_list:
-                        first_prize = num_list[0]
-                    elif p_id == "prizeTwo" and num_list:
-                        last_two = num_list[0]
-                    elif (
-                        p_id in ["prizeFrontThree", "runningNumberFrontThree"]
-                    ) and num_list:
-                        front_three = num_list
-                    elif (
-                        p_id in ["prizeRearThree", "runningNumberRearThree"]
-                    ) and num_list:
-                        last_three = num_list
-
-                lottery_history.append(
-                    {
-                        "date": data.get("date", draw.get("date")),
-                        "first_prize": first_prize,
+                    history.append({
+                        "date": detail.get("date", ""),
+                        "first_prize": p1,
                         "front_three": front_three,
                         "last_three": last_three,
                         "last_two": last_two,
-                    }
-                )
-        except Exception as e:
-            print(f"Error fetching draw {draw_id}: {e}")
+                    })
 
-    # ทำการบันทึกเฉพาะเมื่อดึงข้อมูลได้จริงเท่านั้น
-    if len(lottery_history) > 0:
-        output_data = {
-            "status": "online",
-            "total_records": len(lottery_history),
-            "history": lottery_history,
-        }
-        with open("data.json", "w", encoding="utf-8") as f:
-            json.dump(output_data, f, ensure_ascii=False, indent=2)
-        print(
-            f"✅ อัปเดต data.json สำเร็จ! บันทึกข้อมูลเรียบร้อย"
-            f" {len(lottery_history)} งวด"
-        )
-    else:
-        print("⚠️ ไม่สามารถดึงข้อมูลสถิติได้ ยกเลิกการบันทึกไฟล์")
+                    if len(history) >= target_draws:
+                        break
+
+                time.sleep(0.2)  # หน่วงเวลาสั้นๆ ป้องกัน API บล็อก
+
+        except Exception as e:
+            print(f"Error fetching page {page}: {e}")
+            break
+
+        page += 1
+
+    # สร้างโครงสร้างข้อมูลสำหรับบันทึก
+    output = {
+        "status": "online",
+        "total_records": len(history),
+        "history": history,
+    }
+
+    with open("data.json", "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+
+    print(f"Successfully saved {len(history)} draws to data.json")
 
 
 if __name__ == "__main__":
-    main()
+    fetch_lottery_data(48)
