@@ -2,8 +2,8 @@ import json
 import requests
 
 
-def main():
-    print("🚀 กำลังดึงข้อมูลสถิติสลากกินแบ่งรัฐบาลย้อนหลัง 5 ปี (120 งวด)...")
+def fetch_thai_lottery_5years():
+    print("🚀 กำลังดึงข้อมูลสถิติหวยรัฐบาลย้อนหลัง 5 ปี (120 งวด)...")
 
     all_draws = []
     # ดึงรายการงวด 8 หน้า (รวมประมาณ 120 งวด)
@@ -17,7 +17,7 @@ def main():
             else:
                 break
         except Exception as e:
-            print(f"Error fetching page {page}: {e}")
+            print(f"Error page {page}: {e}")
             break
 
     lottery_history = []
@@ -40,20 +40,20 @@ def main():
 
                 for item in prizes:
                     p_id = item.get("id")
-                    num_list = item.get("number", [])
+                    number_list = item.get("number", [])
 
-                    if p_id == "prizeFirst" and num_list:
-                        first_prize = num_list[0]
-                    elif p_id == "prizeTwo" and num_list:
-                        last_two = num_list[0]
+                    if p_id == "prizeFirst" and number_list:
+                        first_prize = number_list[0]
+                    elif p_id == "prizeTwo" and number_list:
+                        last_two = number_list[0]
                     elif (
                         p_id in ["prizeFrontThree", "runningNumberFrontThree"]
-                    ) and num_list:
-                        front_three = num_list
+                    ) and number_list:
+                        front_three = number_list
                     elif (
                         p_id in ["prizeRearThree", "runningNumberRearThree"]
-                    ) and num_list:
-                        last_three = num_list
+                    ) and number_list:
+                        last_three = number_list
 
                 lottery_history.append(
                     {
@@ -64,11 +64,8 @@ def main():
                         "last_two": last_two,
                     }
                 )
-                print(
-                    f"[{index + 1}/{total_draws}] ดึงข้อมูลสำเร็จ: {data.get('date')}"
-                )
         except Exception as e:
-            print(f"Error fetching draw {draw_id}: {e}")
+            print(f"Error draw {draw_id}: {e}")
 
     output_data = {
         "status": "online",
@@ -79,10 +76,8 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
 
-    print(
-        f"✅ อัปเดต data.json สมบูรณ์! บันทึกข้อมูลเรียบร้อย {len(lottery_history)} งวด"
-    )
+    print("✅ ดึงข้อมูลสำเร็จครบ 120 งวดแล้ว!")
 
 
 if __name__ == "__main__":
-    main()
+    fetch_thai_lottery_5years()
