@@ -1,97 +1,88 @@
 import json
-import os
-import re
-import urllib.request
-from bs4 import BeautifulSoup
+import requests
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-
-def fetch_sanook():
-    """ แหล่งที่ 1: Sanook News """
-    print("🔍 กำลังดึงข้อมูลจาก แหล่งที่ 1 (Sanook)...")
-    url = "https://news.sanook.com/lotto/"
-    req = urllib.request.Request(url, headers=HEADERS)
-    html = urllib.request.urlopen(req, timeout=10).read().decode('utf-8')
-    soup = BeautifulSoup(html, 'html.parser')
-
-    date_el = soup.find('h2', class_='lotto-check__title')
-    numbers = [tag.text.strip() for tag in soup.find_all('strong', class_='lotto-check__number')]
-
-    if date_el and len(numbers) >= 6:
-        raw_date = date_el.text.strip()
-        date_clean = re.sub(r'^(ผลสลากกินแบ่งรัฐบาล|ตรวจหวย)\s*', '', raw_date).strip()
-        
-        return {
-            "date": date_clean,
-            "running": [numbers[0]],
-            "running3Front": [numbers[1], numbers[2]],
-            "running3Back": [numbers[3], numbers[4]],
-            "running2Back": numbers[5]
-        }
-    raise Exception("โครงสร้างหน้าเว็บ Sanook ไม่สมบูรณ์")
-
-def fetch_kapook():
-    """ แหล่งที่ 2: Kapook Lotto """
-    print("🔍 กำลังดึงข้อมูลจาก แหล่งที่ 2 (Kapook)...")
-    url = "https://lotto.kapook.com/"
-    req = urllib.request.Request(url, headers=HEADERS)
-    html = urllib.request.urlopen(req, timeout=10).read().decode('utf-8')
-    soup = BeautifulSoup(html, 'html.parser')
-
-    date_el = soup.find('h1', class_='title') or soup.find('h2')
-    numbers = [tag.text.strip() for tag in soup.find_all('div', class_='num') if tag.text.strip().isdigit()]
-
-    if len(numbers) >= 6:
-        date_text = date_el.text.strip() if date_el else "งวดล่าสุด"
-        return {
-            "date": date_text,
-            "running": [numbers[0]],
-            "running3Front": [numbers[1], numbers[2]],
-            "running3Back": [numbers[3], numbers[4]],
-            "running2Back": numbers[5]
-        }
-    raise Exception("โครงสร้างหน้าเว็บ Kapook ไม่สมบูรณ์")
 
 def main():
-    sources = [fetch_sanook, fetch_kapook]
-    new_data = None
+    print("🚀 กำลังดึงข้อมูลสถิติสลากกินแบ่งรัฐบาลย้อนหลัง 5 ปี (120 งวด)...")
 
-    # วนลูปดึงข้อมูลทีละแหล่ง ถ้าแหล่งแรกล่มจะสลับไปแหล่งถัดไปอัตโนมัติ
-    for source_func in sources:
+    all_draws = []
+    # ดึงรายการงวด 8 หน้า (รวมประมาณ 120 งวด)
+    for page in range(1, 9):
+        list_url = f"https://lotto.api.rayriffy.com/list/{page}"
         try:
-            new_data = source_func()
-            print(f"✅ ดึงข้อมูลสำเร็จจาก {source_func.__name__}!")
-            break
+            res = requests.get(list_url, timeout=10)
+            if res.status_code == 200:
+                draws = res.json().get("response", [])
+                all_draws.extend(draws)
+            else:
+                break
         except Exception as e:
-            print(f"⚠️ {source_func.__name__} ขัดข้อง: {e}")
+            print(f"Error fetching page {page}: {e}")
+            break
 
-    if not new_data:
-        print("❌ ไม่สามารถดึงข้อมูลจากทุกแหล่งได้ในขณะนี้")
-        return
+    lottery_history = []
+    total_draws = min(len(all_draws), 120)
 
-    # อ่านไฟล์ data.json เดิมที่มีอยู่
-    file_path = "data.json"
-    existing_json = {"status": "success", "response": []}
+    for index, draw in enumerate(all_draws[:total_draws]):
+        draw_id = draw.get("id")
+        detail_url = f"https://lotto.api.rayriffy.com/lotto/{draw_id}"
 
-    if os.path.exists(file_path):
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                existing_json = json.load(f)
-        except Exception:
-            pass
+            res = requests.get(detail_url, timeout=10)
+            if res.status_code == 200:
+                data = res.json().get("response", {})
+                prizes = data.get("prizes", [])
 
-    # ตรวจสอบว่ามีข้อมูลของงวดนี้อยู่แล้วหรือยัง
-    current_list = existing_json.get("response", [])
-    if not current_list or current_list[0].get("date") != new_data["date"]:
-        # เป็นงวดใหม่ -> แทรกไว้ด้านบนสุด
-        current_list.insert(0, new_data)
-        existing_json["response"] = current_list
+                first_prize = ""
+                last_two = ""
+                front_three = []
+                last_three = []
 
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(existing_json, f, ensure_ascii=False, indent=2)
-        print(f"🎉 อัปเดตข้อมูลหวยงวดใหม่เรียบร้อย: {new_data['date']}")
-    else:
-        print("ℹ️ ข้อมูลล่าสุดในระบบเป็นงวดปัจจุบันอยู่แล้ว ไม่ต้องอัปเดตเพิ่ม")
+                for item in prizes:
+                    p_id = item.get("id")
+                    num_list = item.get("number", [])
+
+                    if p_id == "prizeFirst" and num_list:
+                        first_prize = num_list[0]
+                    elif p_id == "prizeTwo" and num_list:
+                        last_two = num_list[0]
+                    elif (
+                        p_id in ["prizeFrontThree", "runningNumberFrontThree"]
+                    ) and num_list:
+                        front_three = num_list
+                    elif (
+                        p_id in ["prizeRearThree", "runningNumberRearThree"]
+                    ) and num_list:
+                        last_three = num_list
+
+                lottery_history.append(
+                    {
+                        "date": data.get("date", draw.get("date")),
+                        "first_prize": first_prize,
+                        "front_three": front_three,
+                        "last_three": last_three,
+                        "last_two": last_two,
+                    }
+                )
+                print(
+                    f"[{index + 1}/{total_draws}] ดึงข้อมูลสำเร็จ: {data.get('date')}"
+                )
+        except Exception as e:
+            print(f"Error fetching draw {draw_id}: {e}")
+
+    output_data = {
+        "status": "online",
+        "total_records": len(lottery_history),
+        "history": lottery_history,
+    }
+
+    with open("data.json", "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2)
+
+    print(
+        f"✅ อัปเดต data.json สมบูรณ์! บันทึกข้อมูลเรียบร้อย {len(lottery_history)} งวด"
+    )
+
 
 if __name__ == "__main__":
     main()
