@@ -1,20 +1,5 @@
 {
   "status": "online",
-  "total_records": 120,
-  "history": [
-    {
-      "date": "16 กันยายน 2569",
-      "first_prize": "730640",
-      "front_three": ["060", "521"],
-      "last_three": ["266", "041"],
-      "last_two": "64"
-    },
-    {
-      "date": "1 กันยายน 2569",
-      "first_prize": "199603",
-      "front_three": ["938", "410"],
-      "last_three": ["037", "344"],
-      "last_two": "39"
-    }
-  ]
+  "total_records": 0,
+  "history": []
 }
