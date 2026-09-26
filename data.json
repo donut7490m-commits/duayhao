@@ -1,110 +1,20 @@
 {
-  "status": "success",
-  "response": [
+  "status": "online",
+  "total_records": 120,
+  "history": [
     {
-      "date": "16 ก.ย. 2026",
-      "running": ["521940"],
-      "running3Front": ["129", "834"],
-      "running3Back": ["402", "715"],
-      "running2Back": "64"
+      "date": "16 กันยายน 2569",
+      "first_prize": "730640",
+      "front_three": ["060", "521"],
+      "last_three": ["266", "041"],
+      "last_two": "64"
     },
     {
-      "date": "01 ก.ย. 2026",
-      "running": ["198473"],
-      "running3Front": ["045", "612"],
-      "running3Back": ["389", "950"],
-      "running2Back": "28"
-    },
-    {
-      "date": "16 ส.ค. 2026",
-      "running": ["830516"],
-      "running3Front": ["271", "540"],
-      "running3Back": ["168", "823"],
-      "running2Back": "79"
-    },
-    {
-      "date": "01 ส.ค. 2026",
-      "running": ["364802"],
-      "running3Front": ["190", "724"],
-      "running3Back": ["513", "967"],
-      "running2Back": "15"
-    },
-    {
-      "date": "16 ก.ค. 2026",
-      "running": ["912305"],
-      "running3Front": ["382", "601"],
-      "running3Back": ["249", "758"],
-      "running2Back": "42"
-    },
-    {
-      "date": "01 ก.ค. 2026",
-      "running": ["058419"],
-      "running3Front": ["154", "893"],
-      "running3Back": ["320", "671"],
-      "running2Back": "93"
-    },
-    {
-      "date": "16 มิ.ย. 2026",
-      "running": ["741928"],
-      "running3Front": ["209", "531"],
-      "running3Back": ["486", "817"],
-      "running2Back": "57"
-    },
-    {
-      "date": "01 มิ.ย. 2026",
-      "running": ["285603"],
-      "running3Front": ["073", "418"],
-      "running3Back": ["625", "934"],
-      "running2Back": "31"
-    },
-    {
-      "date": "16 พ.ค. 2026",
-      "running": ["603841"],
-      "running3Front": ["182", "759"],
-      "running3Back": ["290", "564"],
-      "running2Back": "80"
-    },
-    {
-      "date": "02 พ.ค. 2026",
-      "running": ["491275"],
-      "running3Front": ["310", "647"],
-      "running3Back": ["082", "915"],
-      "running2Back": "16"
-    },
-    {
-      "date": "16 เม.ย. 2026",
-      "running": ["159830"],
-      "running3Front": ["245", "801"],
-      "running3Back": ["376", "629"],
-      "running2Back": "47"
-    },
-    {
-      "date": "01 เม.ย. 2026",
-      "running": ["832064"],
-      "running3Front": ["091", "538"],
-      "running3Back": ["174", "920"],
-      "running2Back": "72"
-    },
-    {
-      "date": "16 มี.ค. 2026",
-      "running": ["682904"],
-      "running3Front": ["241", "730"],
-      "running3Back": ["583", "912"],
-      "running2Back": "89"
-    },
-    {
-      "date": "01 มี.ค. 2026",
-      "running": ["419532"],
-      "running3Front": ["112", "380"],
-      "running3Back": ["645", "809"],
-      "running2Back": "53"
-    },
-    {
-      "date": "16 ก.พ. 2026",
-      "running": ["920109"],
-      "running3Front": ["054", "311"],
-      "running3Back": ["872", "990"],
-      "running2Back": "09"
+      "date": "1 กันยายน 2569",
+      "first_prize": "199603",
+      "front_three": ["938", "410"],
+      "last_three": ["037", "344"],
+      "last_two": "39"
     }
   ]
 }
