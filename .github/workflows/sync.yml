@@ -1,38 +1,33 @@
 name: Auto Sync Lottery Every Draw Date
 
 on:
+  workflow_dispatch: # ปุ่มกดรันเอง
   schedule:
-    # ตั้งเวลาให้บอททำงานอัตโนมัติทุกวันที่ 1 และ 16 ของเดือน เวลา 16:30 น. (ไทย)
-    - cron: '30 9 1,16 * *'
-  workflow_dispatch: # ปล่อยให้กดปุ่มสั่งรันเองได้ด้วย
-
-permissions:
-  contents: write
+    - cron: '0 10 1,16 * *' # รันอัตโนมัติทุกวันที่ 1 และ 16
 
 jobs:
   auto-fetch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
       - name: Install Dependencies
         run: |
-          pip install beautifulsoup4 requests
+          python -m pip install --upgrade pip
+          pip install requests
 
       - name: Run Scraper Bot
-        run: |
-          python sync_lottery.py
+        run: python sync_lottery.py
 
       - name: Commit and Push if New Data Found
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
           git add data.json
-          git diff --staged --quiet || git commit -m "Auto-updated lottery draw data"
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update lottery data" && git push)
