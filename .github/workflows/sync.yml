@@ -1,21 +1,21 @@
 name: Auto Sync Lottery Every Draw Date
 
 on:
-  workflow_dispatch: # ปุ่มกดรันเอง
+  workflow_dispatch: # สำหรับกดสั่งรันเอง
   schedule:
-    - cron: '0 10 1,16 * *' # รันอัตโนมัติทุกวันที่ 1 และ 16
+    - cron: '0 11 1,16 * *' # รันอัตโนมัติทุกวันที่ 1 และ 16 เวลา 18:00 น. (เวลาไทย)
 
 jobs:
   auto-fetch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install Dependencies
         run: |
@@ -30,4 +30,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
           git add data.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update lottery data" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update 2 years lottery data" && git push)
