@@ -1,6 +1,5 @@
 import json
 import sys
-import time
 import requests
 
 
@@ -13,69 +12,47 @@ def fetch_lottery_data(target_draws=48):
         "Accept": "application/json",
     }
 
+    # API แหล่งใหม่สำหรับดึงข้อมูลหวยรัฐบาลไทยย้อนหลัง
+    url = f"https://thai-lottery-api.vercel.app/api/lottery/history?limit={target_draws}"
+
     history = []
 
-    for page in range(1, 7):
-        url = f"https://lotto.api.rayriffy.com/list/{page}"
-        try:
-            res = requests.get(url, headers=headers, timeout=15)
-            if res.status_code != 200:
-                print(f"Page {page} Status Code: {res.status_code}")
-                continue
-
-            records = res.json().get("response", [])
-            if not records:
-                break
+    try:
+        res = requests.get(url, headers=headers, timeout=15)
+        if res.status_code == 200:
+            data = res.json()
+            records = (
+                data.get("data", [])
+                if isinstance(data, dict)
+                else data if isinstance(data, list) else []
+            )
 
             for item in records:
-                draw_id = item.get("id")
-                detail_url = f"https://lotto.api.rayriffy.com/get/{draw_id}"
-                detail_res = requests.get(
-                    detail_url, headers=headers, timeout=15
-                )
+                history.append({
+                    "date": item.get("date", ""),
+                    "first_prize": str(item.get("first_prize", "")),
+                    "front_three": [
+                        str(x) for x in item.get("front_three", [])
+                    ],
+                    "last_three": [str(x) for x in item.get("last_three", [])],
+                    "last_two": str(item.get("last_two", "")),
+                })
+    except Exception as e:
+        print(f"Primary API Error: {e}")
 
-                if detail_res.status_code == 200:
-                    detail = detail_res.json().get("response", {})
-
-                    p1 = ""
-                    prizes = detail.get("prizes", [])
-                    if prizes and len(prizes) > 0:
-                        nums = prizes[0].get("number", [])
-                        if nums:
-                            p1 = nums[0]
-
-                    front_three, last_three, last_two = [], [], ""
-                    for r in detail.get("runningNumbers", []):
-                        if r.get("id") == "runningNumberFrontThree":
-                            front_three = r.get("number", [])
-                        elif r.get("id") == "runningNumberBackThree":
-                            last_three = r.get("number", [])
-                        elif r.get("id") == "runningNumberBackTwo":
-                            nums = r.get("number", [])
-                            last_two = nums[0] if nums else ""
-
-                    history.append({
-                        "date": detail.get("date", ""),
-                        "first_prize": p1,
-                        "front_three": front_three,
-                        "last_three": last_three,
-                        "last_two": last_two,
-                    })
-
-                    if len(history) >= target_draws:
-                        break
-
-                time.sleep(0.1)
-
-        except Exception as e:
-            print(f"Error fetching page {page}: {e}")
-
-        if len(history) >= target_draws:
-            break
-
-    # หากดึงไม่ได้เลย ให้ส่ง Error ออกไปเพื่อให้ Workflow รู้
+    # หาก API หลักมีปัญหา ให้ดึงผ่าน API สำรองทันที
     if not history:
-        print("❌ Error: Could not fetch lottery data from API.")
+        try:
+            backup_url = "https://raw.githubusercontent.com/code-m/thai-lottery-data/main/data.json"
+            res = requests.get(backup_url, headers=headers, timeout=15)
+            if res.status_code == 200:
+                backup_data = res.json()
+                history = backup_data.get("history", [])[:target_draws]
+        except Exception as e:
+            print(f"Backup API Error: {e}")
+
+    if not history:
+        print("❌ Error: Could not fetch lottery data from any API.")
         sys.exit(1)
 
     output = {
