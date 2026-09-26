@@ -1,10 +1,10 @@
 import json
+import sys
 import time
 import requests
 
 
 def fetch_lottery_data(target_draws=48):
-    # ปลอมแปลง User-Agent เพื่อป้องกันเซิร์ฟเวอร์ปฏิเสธการเชื่อมต่อ
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -14,16 +14,14 @@ def fetch_lottery_data(target_draws=48):
     }
 
     history = []
-    page = 1
 
-    # ดึงข้อมูลย้อนหลัง 2 ปี (ประมาณ 48-50 งวด)
-    while len(history) < target_draws and page <= 6:
+    for page in range(1, 7):
         url = f"https://lotto.api.rayriffy.com/list/{page}"
         try:
-            res = requests.get(url, headers=headers, timeout=10)
+            res = requests.get(url, headers=headers, timeout=15)
             if res.status_code != 200:
-                print(f"Page {page} HTTP Status: {res.status_code}")
-                break
+                print(f"Page {page} Status Code: {res.status_code}")
+                continue
 
             records = res.json().get("response", [])
             if not records:
@@ -33,20 +31,21 @@ def fetch_lottery_data(target_draws=48):
                 draw_id = item.get("id")
                 detail_url = f"https://lotto.api.rayriffy.com/get/{draw_id}"
                 detail_res = requests.get(
-                    detail_url, headers=headers, timeout=10
+                    detail_url, headers=headers, timeout=15
                 )
 
                 if detail_res.status_code == 200:
                     detail = detail_res.json().get("response", {})
 
-                    # ดึงรางวัลที่ 1
-                    p1 = detail.get("prizes", [{}])[0].get("number", [""])[0]
+                    p1 = ""
+                    prizes = detail.get("prizes", [])
+                    if prizes and len(prizes) > 0:
+                        nums = prizes[0].get("number", [])
+                        if nums:
+                            p1 = nums[0]
 
-                    # ดึงเลขหน้า-เลขท้าย
-                    p2 = detail.get("runningNumbers", [])
                     front_three, last_three, last_two = [], [], ""
-
-                    for r in p2:
+                    for r in detail.get("runningNumbers", []):
                         if r.get("id") == "runningNumberFrontThree":
                             front_three = r.get("number", [])
                         elif r.get("id") == "runningNumberBackThree":
@@ -66,15 +65,19 @@ def fetch_lottery_data(target_draws=48):
                     if len(history) >= target_draws:
                         break
 
-                time.sleep(0.2)  # หน่วงเวลาสั้นๆ ป้องกัน API บล็อก
+                time.sleep(0.1)
 
         except Exception as e:
             print(f"Error fetching page {page}: {e}")
+
+        if len(history) >= target_draws:
             break
 
-        page += 1
+    # หากดึงไม่ได้เลย ให้ส่ง Error ออกไปเพื่อให้ Workflow รู้
+    if not history:
+        print("❌ Error: Could not fetch lottery data from API.")
+        sys.exit(1)
 
-    # สร้างโครงสร้างข้อมูลสำหรับบันทึก
     output = {
         "status": "online",
         "total_records": len(history),
@@ -84,7 +87,7 @@ def fetch_lottery_data(target_draws=48):
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"Successfully saved {len(history)} draws to data.json")
+    print(f"✅ Successfully saved {len(history)} draws to data.json")
 
 
 if __name__ == "__main__":
