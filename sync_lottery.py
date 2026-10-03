@@ -1,95 +1,145 @@
 import json
+import re
+import time
+import requests
+from bs4 import BeautifulSoup
 
-# คลังข้อมูลผลรางวัลสลากกินแบ่งรัฐบาลย้อนหลัง 2567 - 2569 (จำนวน 65 งวด)
-REAL_LOTTERY_DATA = [
-    # --- ปี 2569 ---
-    {"date": "16 กันยายน 2569", "first_prize": "730640", "last_two": "64"},
-    {"date": "1 กันยายน 2569", "first_prize": "417212", "last_two": "04"},
-    {"date": "16 สิงหาคม 2569", "first_prize": "004615", "last_two": "53"},
-    {"date": "1 สิงหาคม 2569", "first_prize": "932479", "last_two": "69"},
-    {"date": "16 กรกฎาคม 2569", "first_prize": "639214", "last_two": "71"},
-    {"date": "1 กรกฎาคม 2569", "first_prize": "751495", "last_two": "62"},
-    {"date": "16 มิถุนายน 2569", "first_prize": "287184", "last_two": "48"},
-    {"date": "1 มิถุนายน 2569", "first_prize": "173770", "last_two": "95"},
-    {"date": "16 พฤษภาคม 2569", "first_prize": "107387", "last_two": "08"},
-    {"date": "2 พฤษภาคม 2569", "first_prize": "536077", "last_two": "43"},
-    {"date": "16 เมษายน 2569", "first_prize": "309612", "last_two": "77"},
-    {"date": "1 เมษายน 2569", "first_prize": "292514", "last_two": "47"},
-    {"date": "16 มีนาคม 2569", "first_prize": "833009", "last_two": "64"},
-    {"date": "1 มีนาคม 2569", "first_prize": "820866", "last_two": "06"},
-    {"date": "16 กุมภาพันธ์ 2569", "first_prize": "340563", "last_two": "07"},
-    {"date": "1 กุมภาพันธ์ 2569", "first_prize": "174629", "last_two": "48"},
-    {"date": "17 มกราคม 2569", "first_prize": "878972", "last_two": "02"},
-    {"date": "2 มกราคม 2569", "first_prize": "837706", "last_two": "16"},
-
-    # --- ปี 2568 ---
-    {"date": "16 ธันวาคม 2568", "first_prize": "763895", "last_two": "52"},
-    {"date": "1 ธันวาคม 2568", "first_prize": "461252", "last_two": "22"},
-    {"date": "16 พฤศจิกายน 2568", "first_prize": "458145", "last_two": "37"},
-    {"date": "1 พฤศจิกายน 2568", "first_prize": "345898", "last_two": "87"},
-    {"date": "16 ตุลาคม 2568", "first_prize": "059696", "last_two": "61"},
-    {"date": "1 ตุลาคม 2568", "first_prize": "876978", "last_two": "77"},
-    {"date": "16 กันยายน 2568", "first_prize": "074646", "last_two": "58"},
-    {"date": "1 กันยายน 2568", "first_prize": "506356", "last_two": "31"},
-    {"date": "16 สิงหาคม 2568", "first_prize": "994865", "last_two": "63"},
-    {"date": "1 สิงหาคม 2568", "first_prize": "811852", "last_two": "50"},
-    {"date": "16 กรกฎาคม 2568", "first_prize": "245324", "last_two": "26"},
-    {"date": "1 กรกฎาคม 2568", "first_prize": "949246", "last_two": "91"},
-    {"date": "16 มิถุนายน 2568", "first_prize": "507392", "last_two": "06"},
-    {"date": "1 มิถุนายน 2568", "first_prize": "559352", "last_two": "20"},
-    {"date": "16 พฤษภาคม 2568", "first_prize": "251309", "last_two": "87"},
-    {"date": "2 พฤษภาคม 2568", "first_prize": "213388", "last_two": "06"},
-    {"date": "16 เมษายน 2568", "first_prize": "266227", "last_two": "85"},
-    {"date": "1 เมษายน 2568", "first_prize": "669687", "last_two": "36"},
-    {"date": "16 มีนาคม 2568", "first_prize": "757563", "last_two": "32"},
-    {"date": "1 มีนาคม 2568", "first_prize": "818894", "last_two": "54"},
-    {"date": "16 กุมภาพันธ์ 2568", "first_prize": "847377", "last_two": "50"},
-    {"date": "1 กุมภาพันธ์ 2568", "first_prize": "558700", "last_two": "51"},
-    {"date": "17 มกราคม 2568", "first_prize": "807779", "last_two": "23"},
-    {"date": "2 มกราคม 2568", "first_prize": "730209", "last_two": "51"},
-
-    # --- ปี 2567 ---
-    {"date": "16 ธันวาคม 2567", "first_prize": "097863", "last_two": "21"},
-    {"date": "1 ธันวาคม 2567", "first_prize": "669843", "last_two": "61"},
-    {"date": "16 พฤศจิกายน 2567", "first_prize": "187221", "last_two": "38"},
-    {"date": "1 พฤศจิกายน 2567", "first_prize": "536044", "last_two": "32"},
-    {"date": "16 ตุลาคม 2567", "first_prize": "482962", "last_two": "00"},
-    {"date": "1 ตุลาคม 2567", "first_prize": "718665", "last_two": "59"},
-    {"date": "16 กันยายน 2567", "first_prize": "608662", "last_two": "37"},
-    {"date": "1 กันยายน 2567", "first_prize": "199606", "last_two": "94"},
-    {"date": "16 สิงหาคม 2567", "first_prize": "095867", "last_two": "28"},
-    {"date": "1 สิงหาคม 2567", "first_prize": "407041", "last_two": "46"},
-    {"date": "16 กรกฎาคม 2567", "first_prize": "367336", "last_two": "21"},
-    {"date": "1 กรกฎาคม 2567", "first_prize": "434503", "last_two": "89"},
-    {"date": "16 มิถุนายน 2567", "first_prize": "518504", "last_two": "31"},
-    {"date": "1 มิถุนายน 2567", "first_prize": "530593", "last_two": "42"},
-    {"date": "16 พฤษภาคม 2567", "first_prize": "205690", "last_two": "60"},
-    {"date": "2 พฤษภาคม 2567", "first_prize": "980116", "last_two": "17"},
-    {"date": "16 เมษายน 2567", "first_prize": "943598", "last_two": "79"},
-    {"date": "1 เมษายน 2567", "first_prize": "803481", "last_two": "90"},
-    {"date": "16 มีนาคม 2567", "first_prize": "997626", "last_two": "78"},
-    {"date": "1 มีนาคม 2567", "first_prize": "253603", "last_two": "79"},
-    {"date": "16 กุมภาพันธ์ 2567", "first_prize": "941395", "last_two": "43"},
-    {"date": "1 กุมภาพันธ์ 2567", "first_prize": "607063", "last_two": "09"},
-    {"date": "17 มกราคม 2567", "first_prize": "105979", "last_two": "61"},
-]
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/122.0.0.0 Safari/537.36"
+    )
+}
 
 
-def update_data():
+def scrape_sanook_archive(max_pages=8):
+    """ดึงข้อมูลผลสลากกินแบ่งรัฐบาลย้อนหลังจาก Sanook Archive (8 หน้า = ประมาณ 5 ปี / 120 งวด)"""
+    all_results = []
+    print(
+        f"🚀 กำลังเริ่มดึงข้อมูลสลากย้อนหลังจาก Sanook Archive (รวม {max_pages}"
+        " หน้า)..."
+    )
+
+    for page in range(1, max_pages + 1):
+        url = (
+            f"https://news.sanook.com/lotto/archive/p/{page}/"
+            if page > 1
+            else "https://news.sanook.com/lotto/archive/"
+        )
+        print(f"📖 กำลังดึงข้อมูลจากหน้า {page}: {url}")
+
+        try:
+            res = requests.get(url, headers=HEADERS, timeout=15)
+            if res.status_code != 200:
+                print(f"⚠️ หน้า {page} ตอบกลับด้วยสถานะ {res.status_code}")
+                break
+
+            soup = BeautifulSoup(res.text, "html.parser")
+
+            # ค้นหาบล็อกการ์ดผลสลากในหน้า Archive
+            articles = soup.find_all(
+                "article", class_=re.compile(r"archive|lotto")
+            )
+            if not articles:
+                articles = soup.select("div.archive-list__item") or soup.find_all(
+                    "article"
+                )
+
+            for art in articles:
+                try:
+                    # 1. ดึงวันที่
+                    title_tag = art.find(["h3", "h2", "a"])
+                    if not title_tag:
+                        continue
+
+                    title_text = title_tag.get_text(strip=True)
+                    date_match = re.search(
+                        r"ตรวจหวย\s+(.*?)\s+ผลสลาก", title_text
+                    ) or re.search(r"\d{1,2}\s+[ก-ฮ\.]+\s+\d{2,4}", title_text)
+                    date_str = (
+                        date_match.group(1)
+                        if (date_match and "ตรวจหวย" in title_text)
+                        else (
+                            date_match.group(0) if date_match else title_text
+                        )
+                    )
+
+                    # 2. ดึงข้อความทั้งหมดในการ์ด
+                    body_text = art.get_text(" ", strip=True)
+
+                    # รางวัลที่ 1
+                    p1_match = re.search(
+                        r"รางวัลที่\s*1\s*(?:รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{6})",
+                        body_text,
+                    )
+                    first_prize = p1_match.group(1) if p1_match else ""
+
+                    # เลขหน้า 3 ตัว (2 รางวัล)
+                    front3_match = re.search(
+                        r"เลขหน้า\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
+                        body_text,
+                    )
+                    front_three = (
+                        [front3_match.group(1), front3_match.group(2)]
+                        if front3_match
+                        else []
+                    )
+
+                    # เลขท้าย 3 ตัว (2 รางวัล)
+                    last3_match = re.search(
+                        r"เลขท้าย\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
+                        body_text,
+                    )
+                    last_three = (
+                        [last3_match.group(1), last3_match.group(2)]
+                        if last3_match
+                        else []
+                    )
+
+                    # เลขท้าย 2 ตัว
+                    last2_match = re.search(
+                        r"เลขท้าย\s*2\s*ตัว\s*(?:1\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{2})",
+                        body_text,
+                    )
+                    last_two = last2_match.group(1) if last2_match else ""
+
+                    if first_prize and last_two:
+                        all_results.append({
+                            "date": date_str,
+                            "first_prize": first_prize,
+                            "front_three": front_three,
+                            "last_three": last_three,
+                            "last_two": last_two,
+                        })
+                except Exception:
+                    continue
+
+            time.sleep(0.5)  # พัก 0.5 วินาทีเพื่อไม่ให้เซิร์ฟเวอร์บล็อก
+
+        except Exception as e:
+            print(f"❌ เกิดข้อผิดพลาดในหน้า {page}: {e}")
+            break
+
+    return all_results
+
+
+def main():
+    data = scrape_sanook_archive(max_pages=8)
+
     output = {
         "status": "online",
-        "total_records": len(REAL_LOTTERY_DATA),
-        "history": REAL_LOTTERY_DATA,
+        "total_records": len(data),
+        "history": data,
     }
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(
-        f"✅ Updated data.json successfully with {len(REAL_LOTTERY_DATA)}"
-        " records."
+        f"🎉 ดึงข้อมูลสำเร็จ! บันทึกลง data.json ทั้งหมด {len(data)} งวดเรียบร้อยแล้ว"
     )
 
 
 if __name__ == "__main__":
-    update_data()
+    main()
