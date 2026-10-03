@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LORD OF NUMBERS | ระบบวิเคราะห์เชิงสถิติสลากกินแบ่งรัฐบาล</title>
+    <title>huay | ระบบวิเคราะห์เชิงสถิติสลากกินแบ่งรัฐบาล</title>
     <!-- Google Fonts: Cinzel สำหรับหัวข้อสไตล์ Dark Souls และ Prompt สำหรับภาษาไทย -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -167,7 +167,7 @@
 
         .pred-value {
             font-family: 'Cinzel', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 0 10px var(--ember-orange);
@@ -242,7 +242,7 @@
         /* Responsiveness */
         @media (max-width: 600px) {
             header h1 { font-size: 1.8rem; }
-            .pred-value { font-size: 1.3rem; }
+            .pred-value { font-size: 1.2rem; }
             .tab-btn { padding: 10px 16px; font-size: 0.8rem; }
         }
     </style>
@@ -332,8 +332,6 @@ async function fetchLiveLotteryData() {
         if (!response.ok) throw new Error('ไม่พบไฟล์ data.json ในระบบ');
 
         const json = await response.json();
-        
-        // รองรับทั้งโครงสร้างแบบ history และ response
         const list = json.history || json.response;
 
         if (list && list.length > 0) {
@@ -342,7 +340,8 @@ async function fetchLiveLotteryData() {
                 first: item.first_prize || (item.running ? item.running[0] : "──────"),
                 threeFront: item.front_three || item.running3Front || ["───", "───"],
                 threeBack: item.last_three || item.running3Back || ["───", "───"],
-                twoBack: item.last_two || item.running2Back || "──"
+                twoBack: item.last_two || item.running2Back || "──",
+                ensemble_models: item.ensemble_models || null
             }));
 
             statusBar.innerHTML = `สถานะระบบ: <span class="status-online">● เชื่อมต่อและดึงข้อมูลสถิติล่าสุดสมบูรณ์</span>`;
@@ -373,8 +372,7 @@ function getCategoryNumbers(item) {
     return [];
 }
 
-// --- 5. อัลกอริทึมแบบจำลองสถิติ 20 รูปแบบ (Dynamic 20 Predictions) ---
-// --- 5. อัลกอริทึมแบบจำลองสถิติ 20 รูปแบบ (Dynamic 20 Predictions - ปรับจำนวนหลักตามหมวดหมู่) ---
+// --- 5. อัลกอริทึมแบบจำลองสถิติ 20 รูปแบบ ( dynamic 20 predictions ) ---
 function generate20Predictions() {
     const allNumbers = [];
     currentData.forEach(item => {
@@ -401,20 +399,33 @@ function generate20Predictions() {
     const dLast = sortedDigits[sortedDigits.length - 1] || '9';
     const dSecLast = sortedDigits[sortedDigits.length - 2] || '8';
 
-    // ปรับรูปแบบชุดตัวเลขทำนายตามหมวดหมู่ที่เลือก
-    let compositeNumber = `${d0}${d1}`;
-    let ensembleNumber = `${d0}${d1}`;
+    // คำนวณแบบจำลองสถิติรวม (Ensemble Meta-Model) ทั้ง 3 ความเป็นไปได้
+    let mode1 = "", mode2 = "", mode3 = "";
 
     if (activeCategory === '2digits') {
-        compositeNumber = `${d0}${d1}`;
-        ensembleNumber = `${d0}${d1}`;
+        mode1 = `${d0}${d1}`;
+        mode2 = `${d2}${d3}`;
+        mode3 = `${d0}${d4}`;
     } else if (activeCategory === '3digits') {
-        compositeNumber = `${d0}${d1}`;
-        ensembleNumber = `${d0}${d1}${d2}`;
+        mode1 = `${d0}${d1}${d2}`;
+        mode2 = `${d3}${d4}${d5}`;
+        mode3 = `${d0}${d2}${d4}`;
     } else if (activeCategory === '6digits') {
-        compositeNumber = `${d0}${d1}${d2}`;
-        ensembleNumber = `${d0}${d1}${d2}${d3}${d4}${d5}`;
+        mode1 = `${d0}${d1}${d2}${d3}${d4}${d5}`;
+        mode2 = `${d5}${d4}${d3}${d2}${d1}${d0}`;
+        mode3 = `${d0}${d2}${d4}${d1}${d3}${d5}`;
     }
+
+    // ข้อความแสดงผล 3 แบบใน โมเดลที่ 20
+    const ensembleHTML = `
+        <div style="font-size: 0.95rem; text-align: left; padding: 0 10px; line-height: 1.7;">
+            <div><span style="color:var(--gold-primary);">รูปแบบ 1:</span> <strong style="color:var(--gold-bright);">${mode1}</strong></div>
+            <div><span style="color:var(--gold-primary);">รูปแบบ 2:</span> <strong style="color:var(--gold-bright);">${mode2}</strong></div>
+            <div><span style="color:var(--gold-primary);">รูปแบบ 3:</span> <strong style="color:var(--gold-bright);">${mode3}</strong></div>
+        </div>
+    `;
+
+    let compositeNumber = activeCategory === '6digits' ? `${d0}${d1}${d2}` : `${d0}${d1}`;
 
     return [
         { title: "1. ความถี่สูงสุด (High Frequency)", val: `ตัวเลขเด่น: ${d0}`, desc: `ปรากฏทั้งหมด ${digitCounts[d0]} ครั้งในชุดสถิติย้อนหลัง` },
@@ -436,7 +447,7 @@ function generate20Predictions() {
         { title: "17. การแจกแจงปัวซซง (Poisson Expected)", val: `ค่าคาดหมาย: ${d1}`, desc: "ตัวเลขที่มีค่าคาดหมายการกระจายตัวเข้าสู่จุดสมดุล" },
         { title: "18. ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)", val: getStdDevRange(allNumbers), desc: "ขอบเขตส่วนเบี่ยงเบนมาตรฐานของผลรวมตัวเลข" },
         { title: "19. รอบวัฏจักรซ้ำ (Cyclic Repeat Trend)", val: `แนวโน้มซ้ำ: ${d0}`, desc: "ประเมินตัวเลขที่มีโอกาสปรากฏซ้ำตามรอบวัฏจักร" },
-        { title: "20. แบบจำลองสถิติรวม (Ensemble Meta-Model)", val: `ชุดสรุป: ${ensembleNumber}`, desc: "การประมวลผลร่วมจากแบบจำลองเพื่อโครงสร้างตัวเลขที่ดีที่สุด" }
+        { title: "20. แบบจำลองสถิติรวม (Ensemble Meta-Model)", val: ensembleHTML, desc: "การประมวลผลร่วมจากแบบจำลองเป็น 3 โครงสร้างแนวทางหลัก" }
     ];
 }
 
