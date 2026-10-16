@@ -13,17 +13,31 @@ HEADERS = {
 }
 
 
-def scrape_sanook_archive(max_pages=24):
-    """ดึงข้อมูลผลสลากกินแบ่งรัฐบาลย้อนหลังจาก Sanook Archive ตั้งแต่หน้า 1 ถึง max_pages (24 หน้า ≈ 360 งวด / ย้อนหลัง ~15 ปี)"""
+def clean_date_str(raw_text):
+    """สกัดเฉพาะวันที่ เช่น '16 ตุลาคม 2569' ออกมาจากข้อความ"""
+    match = re.search(r"(\d{1,2}\s+[ก-ฮ\.]+\s+\d{2,4})", raw_text)
+    if match:
+        date_part = match.group(1)
+        parts = date_part.split()
+        if len(parts) == 3 and len(parts[2]) == 2:
+            parts[2] = "25" + parts[2]
+        return " ".join(parts)
+    return None
+
+
+def scrape_sanook_archive(max_pages=50):
     all_results = []
+    seen_dates = set()
+
     print(
-        "🚀 เริ่มดึงข้อมูลสลากย้อนหลัง จาก Sanook Archive จนถึงหน้าที่"
-        f" {max_pages}..."
+        "🚀 เริ่มดึงข้อมูลสลากย้อนหลังย้อนไปถึงปี 2550 จาก Sanook Archive (1 -"
+        f" {max_pages} หน้า)..."
     )
 
     for page in range(1, max_pages + 1):
+        # แก้ไข URL ให้ตรงกับโครงสร้างจริงของ Sanook (/archive/page/{page}/)
         url = (
-            f"https://news.sanook.com/lotto/archive/p/{page}/"
+            f"https://news.sanook.com/lotto/archive/page/{page}/"
             if page > 1
             else "https://news.sanook.com/lotto/archive/"
         )
@@ -35,54 +49,39 @@ def scrape_sanook_archive(max_pages=24):
 
             if res.status_code != 200:
                 print(
-                    f"⚠️ หน้า {page} ตอบกลับด้วยสถานะ HTTP {res.status_code}"
+                    f"⚠️ หน้า {page} ตอบกลับด้วย HTTP {res.status_code}"
                     " (ข้ามหน้านี้)"
                 )
                 continue
 
             soup = BeautifulSoup(res.text, "html.parser")
-
-            # ค้นหาบล็อกรายการสลากในการ์ด archive
             articles = soup.find_all(
                 "article", class_=re.compile(r"archive|lotto")
-            )
-            if not articles:
-                articles = soup.select("div.archive-list__item") or soup.find_all(
-                    "article"
-                )
+            ) or soup.select("div.archive-list__item")
 
             page_count = 0
             for art in articles:
                 try:
-                    # 1. ดึงวันที่
                     title_tag = art.find(["h3", "h2", "a"])
                     if not title_tag:
                         continue
 
                     title_text = title_tag.get_text(strip=True)
-                    date_match = re.search(
-                        r"ตรวจหวย\s+(.*?)\s+ผลสลาก", title_text
-                    ) or re.search(r"\d{1,2}\s+[ก-ฮ\.]+\s+\d{2,4}", title_text)
+                    date_str = clean_date_str(title_text)
 
-                    if date_match:
-                        date_str = (
-                            date_match.group(1)
-                            if "ตรวจหวย" in title_text
-                            else date_match.group(0)
-                        )
-                    else:
-                        date_str = title_text
+                    if not date_str or date_str in seen_dates:
+                        continue
 
                     body_text = art.get_text(" ", strip=True)
 
-                    # 2. รางวัลที่ 1 (6 หลัก)
+                    # 1. รางวัลที่ 1 (6 หลัก)
                     p1_match = re.search(
                         r"รางวัลที่\s*1\s*(?:รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{6})",
                         body_text,
                     )
                     first_prize = p1_match.group(1) if p1_match else ""
 
-                    # 3. เลขหน้า 3 ตัว (2 รางวัล)
+                    # 2. เลขหน้า 3 ตัว (ถ้ามี)
                     front3_match = re.search(
                         r"เลขหน้า\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
                         body_text,
@@ -93,18 +92,18 @@ def scrape_sanook_archive(max_pages=24):
                         else []
                     )
 
-                    # 4. เลขท้าย 3 ตัว (2 รางวัล)
+                    # 3. เลขท้าย 3 ตัว
                     last3_match = re.search(
-                        r"เลขท้าย\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
+                        r"เลขท้าย\s*3\s*ตัว\s*(?:[\d]\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})(?:\s*(\d{3})\s*(\d{3}))?",
                         body_text,
                     )
-                    last_three = (
-                        [last3_match.group(1), last3_match.group(2)]
-                        if last3_match
-                        else []
-                    )
+                    last_three = []
+                    if last3_match:
+                        last_three = [
+                            m for m in last3_match.groups() if m and len(m) == 3
+                        ]
 
-                    # 5. เลขท้าย 2 ตัว
+                    # 4. เลขท้าย 2 ตัว
                     last2_match = re.search(
                         r"เลขท้าย\s*2\s*ตัว\s*(?:1\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{2})",
                         body_text,
@@ -119,12 +118,17 @@ def scrape_sanook_archive(max_pages=24):
                             "last_three": last_three,
                             "last_two": last_two,
                         })
+                        seen_dates.add(date_str)
                         page_count += 1
+
                 except Exception:
                     continue
 
-            print(f"   └─ พบบันทึกในหน้า {page} จำนวน {page_count} งวด")
-            time.sleep(0.8)  # หน่วงเวลา 0.8 วินาทีป้องกัน Rate Limit
+            print(
+                f"   └─ เพิ่มงวดใหม่จากหน้า {page}: {page_count} งวด (สะสมรวม"
+                f" {len(all_results)} งวด)"
+            )
+            time.sleep(0.4)
 
         except Exception as e:
             print(f"❌ เกิดข้อผิดพลาดในหน้า {page}: {e}")
@@ -134,7 +138,7 @@ def scrape_sanook_archive(max_pages=24):
 
 
 def main():
-    data = scrape_sanook_archive(max_pages=24)
+    data = scrape_sanook_archive(max_pages=50)
 
     output = {
         "status": "online",
@@ -146,8 +150,8 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(
-        "\n🎉 สำเร็จ! ดึงข้อมูลย้อนหลังถึงหน้าที่ 24 บันทึกลง data.json รวม"
-        f" {len(data)} งวดเรียบร้อยแล้ว"
+        f"\n🎉 ดึงข้อมูลเสร็จสิ้น! ได้ข้อมูลย้อนหลังรวม {len(data)} งวด"
+        " บันทึกลง data.json เรียบร้อยครับ"
     )
 
 
