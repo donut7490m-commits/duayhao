@@ -305,22 +305,15 @@
 </div>
 
 <script>
-// --- 1. ข้อมูลสำรอง (Mock Data) เผื่อกรณีติดต่อไฟล์ data.json ไม่ได้ ---
+// --- 1. ข้อมูลสำรอง (Mock Data) ---
 const mockLotteryData = [
-    { date: "16 มี.ค. 2026", first: "682904", threeFront: ["241", "730"], threeBack: ["583", "912"], twoBack: "89" },
-    { date: "01 มี.ค. 2026", first: "419532", threeFront: ["112", "380"], threeBack: ["645", "809"], twoBack: "53" },
-    { date: "16 ก.พ. 2026", first: "920109", threeFront: ["054", "311"], threeBack: ["872", "990"], twoBack: "09" },
-    { date: "01 ก.พ. 2026", first: "753889", threeFront: ["200", "591"], threeBack: ["143", "728"], twoBack: "89" },
-    { date: "17 ม.ค. 2026", first: "124961", threeFront: ["450", "892"], threeBack: ["331", "604"], twoBack: "61" },
-    { date: "30 ธ.ค. 2025", first: "538238", threeFront: ["129", "640"], threeBack: ["085", "417"], twoBack: "38" },
-    { date: "16 ธ.ค. 2025", first: "841089", threeFront: ["339", "701"], threeBack: ["210", "955"], twoBack: "89" },
-    { date: "01 ธ.ค. 2025", first: "092314", threeFront: ["104", "552"], threeBack: ["480", "829"], twoBack: "14" },
-    { date: "16 พ.ย. 2025", first: "619253", threeFront: ["082", "419"], threeBack: ["361", "740"], twoBack: "53" },
-    { date: "01 พ.ย. 2025", first: "384192", threeFront: ["221", "638"], threeBack: ["109", "584"], twoBack: "92" }
+    { date: "16 ต.ค. 2026", first: "011781", threeFront: ["392", "402"], threeBack: ["171", "255"], twoBack: "48" },
+    { date: "01 ต.ค. 2026", first: "402701", threeFront: ["791", "912"], threeBack: ["058", "396"], twoBack: "70" },
+    { date: "16 ก.ย. 2026", first: "730640", threeFront: ["060", "521"], threeBack: ["266", "041"], twoBack: "64" }
 ];
 
 let currentData = [...mockLotteryData];
-let activeCategory = '2digits'; // ค่าเริ่มต้น: รางวัลเลขท้าย 2 ตัว
+let activeCategory = '2digits';
 
 // --- 2. ฟังก์ชันดึงข้อมูลสถิติจากระบบ ---
 async function fetchLiveLotteryData() {
@@ -340,11 +333,10 @@ async function fetchLiveLotteryData() {
                 first: item.first_prize || (item.running ? item.running[0] : "──────"),
                 threeFront: item.front_three || item.running3Front || ["───", "───"],
                 threeBack: item.last_three || item.running3Back || ["───", "───"],
-                twoBack: item.last_two || item.running2Back || "──",
-                ensemble_models: item.ensemble_models || null
+                twoBack: item.last_two || item.running2Back || "──"
             }));
 
-            statusBar.innerHTML = `สถานะระบบ: <span class="status-online">● เชื่อมต่อและดึงข้อมูลสถิติล่าสุดสมบูรณ์</span>`;
+            statusBar.innerHTML = `สถานะระบบ: <span class="status-online">● เชื่อมต่อและดึงข้อมูลสถิติล่าสุดสมบูรณ์ (${currentData.length} งวด)</span>`;
             updateUI();
             return;
         }
@@ -367,7 +359,7 @@ function switchCategory(cat, evt) {
 // --- 4. ฟังก์ชันจัดหมวดหมู่ตัวเลข ---
 function getCategoryNumbers(item) {
     if (activeCategory === '2digits') return [item.twoBack];
-    if (activeCategory === '3digits') return [...item.threeFront, ...item.threeBack];
+    if (activeCategory === '3digits') return [...(item.threeFront || []), ...(item.threeBack || [])];
     if (activeCategory === '6digits') return [item.first];
     return [];
 }
@@ -379,75 +371,81 @@ function generate20Predictions() {
         allNumbers.push(...getCategoryNumbers(item));
     });
 
-    const digitCounts = {};
-    for (let i = 0; i <= 9; i++) digitCounts[i] = 0;
+    if (allNumbers.length === 0) return [];
 
+    // 1. ความถี่ระยะยาว (สถิติมวลรวมทั้งหมด)
+    const longTermCounts = {};
+    for (let i = 0; i <= 9; i++) longTermCounts[i] = 0;
     allNumbers.forEach(numStr => {
         if (!numStr || numStr.includes('─')) return;
         numStr.split('').forEach(d => {
-            if (digitCounts[d] !== undefined) digitCounts[d]++;
+            if (longTermCounts[d] !== undefined) longTermCounts[d]++;
         });
     });
+    const sortedLT = Object.keys(longTermCounts).sort((a,b) => longTermCounts[b] - longTermCounts[a]);
 
-    const sortedDigits = Object.keys(digitCounts).sort((a,b) => digitCounts[b] - digitCounts[a]);
-    const d0 = sortedDigits[0] || '0';
-    const d1 = sortedDigits[1] || '1';
-    const d2 = sortedDigits[2] || '2';
-    const d3 = sortedDigits[3] || '3';
-    const d4 = sortedDigits[4] || '4';
-    const d5 = sortedDigits[5] || '5';
-    const dLast = sortedDigits[sortedDigits.length - 1] || '9';
-    const dSecLast = sortedDigits[sortedDigits.length - 2] || '8';
+    // 2. ความถี่ระยะสั้น (โมเมนตัม 5 งวดล่าสุด)
+    const shortTermNumbers = allNumbers.slice(0, 5);
+    const shortTermCounts = {};
+    for (let i = 0; i <= 9; i++) shortTermCounts[i] = 0;
+    shortTermNumbers.forEach(numStr => {
+        if (!numStr || numStr.includes('─')) return;
+        numStr.split('').forEach(d => {
+            if (shortTermCounts[d] !== undefined) shortTermCounts[d]++;
+        });
+    });
+    const sortedST = Object.keys(shortTermCounts).sort((a,b) => shortTermCounts[b] - shortTermCounts[a]);
 
-    // คำนวณแบบจำลองสถิติรวม (Ensemble Meta-Model) ทั้ง 3 ความเป็นไปได้
+    const lt0 = sortedLT[0] || '0', lt1 = sortedLT[1] || '1', lt2 = sortedLT[2] || '2', lt3 = sortedLT[3] || '3';
+    const st0 = sortedST[0] || '0', st1 = sortedST[1] || '1', st2 = sortedST[2] || '2';
+    const cold0 = sortedLT[sortedLT.length - 1] || '9', cold1 = sortedLT[sortedLT.length - 2] || '8';
+
+    // คำนวณ Ensemble 3 ลำดับสายสถิติ
     let mode1 = "", mode2 = "", mode3 = "";
 
     if (activeCategory === '2digits') {
-        mode1 = `${d0}${d1}`;
-        mode2 = `${d2}${d3}`;
-        mode3 = `${d0}${d4}`;
+        mode1 = `${lt0}${lt1}`;            // สายสถิติตลอดกาล (Long-term Base)
+        mode2 = `${lt0}${cold0}`;          // สายสมดุลกระจายตัว (Cold Mix)
+        mode3 = `${st0}${st1}`;            // สายโมเมนตัมระยะสั้น (Short-term Trend)
     } else if (activeCategory === '3digits') {
-        mode1 = `${d0}${d1}${d2}`;
-        mode2 = `${d3}${d4}${d5}`;
-        mode3 = `${d0}${d2}${d4}`;
+        mode1 = `${lt0}${lt1}${lt2}`;
+        mode2 = `${lt0}${lt2}${cold0}`;
+        mode3 = `${st0}${st1}${st2}`;
     } else if (activeCategory === '6digits') {
-        mode1 = `${d0}${d1}${d2}${d3}${d4}${d5}`;
-        mode2 = `${d5}${d4}${d3}${d2}${d1}${d0}`;
-        mode3 = `${d0}${d2}${d4}${d1}${d3}${d5}`;
+        mode1 = `${lt0}${lt1}${lt2}${lt3}${sortedLT[4]||'4'}${sortedLT[5]||'5'}`;
+        mode2 = `${lt0}${cold0}${lt1}${cold1}${lt2}${st0}`;
+        mode3 = `${st0}${st1}${st2}${lt0}${lt1}${lt2}`;
     }
 
-    // ข้อความแสดงผล 3 แบบใน โมเดลที่ 20
     const ensembleHTML = `
-        <div style="font-size: 0.95rem; text-align: left; padding: 0 10px; line-height: 1.7;">
-            <div><span style="color:var(--gold-primary);">รูปแบบ 1:</span> <strong style="color:var(--gold-bright);">${mode1}</strong></div>
-            <div><span style="color:var(--gold-primary);">รูปแบบ 2:</span> <strong style="color:var(--gold-bright);">${mode2}</strong></div>
-            <div><span style="color:var(--gold-primary);">รูปแบบ 3:</span> <strong style="color:var(--gold-bright);">${mode3}</strong></div>
+        <div style="font-size: 0.85rem; text-align: left; padding: 0 5px; line-height: 1.6;">
+            <div><span style="color:var(--gold-primary);">1. สายสถิติตลอดกาล:</span> <strong style="color:var(--gold-bright);">${mode1}</strong></div>
+            <div><span style="color:var(--gold-primary);">2. สายสมดุลกระจายตัว:</span> <strong style="color:var(--gold-bright);">${mode2}</strong></div>
+            <div><span style="color:var(--gold-primary);">3. สายโมเมนตัมระยะสั้น:</span> <strong style="color:var(--gold-bright);">${mode3}</strong></div>
         </div>
     `;
 
-    let compositeNumber = activeCategory === '6digits' ? `${d0}${d1}${d2}` : `${d0}${d1}`;
-
     return [
-        { title: "1. ความถี่สูงสุด (High Frequency)", val: `ตัวเลขเด่น: ${d0}`, desc: `ปรากฏทั้งหมด ${digitCounts[d0]} ครั้งในชุดสถิติย้อนหลัง` },
-        { title: "2. ความถี่ต่ำสุด (Low Frequency)", val: `ตัวเลขอ่อน: ${dLast}`, desc: `ปรากฏเพียง ${digitCounts[dLast]} ครั้ง มีโอกาสสุ่มโดยรวมสะสม` },
+        { title: "1. ความถี่สูงสุดระยะยาว (Long-Term Top)", val: `ตัวเลขเด่น: ${lt0}`, desc: `ปรากฏ ${longTermCounts[lt0]} ครั้ง ตลอดชุดสถิติมวลรวม` },
+        { title: "2. ตัวเลขหมุนเวียนต่ำ (Cold Digit)", val: `ตัวเลขอ่อน: ${cold0}`, desc: `ปรากฏน้อยที่สุด (${longTermCounts[cold0]} ครั้ง) รอการกระจายตัวเข้าสู่สมดุล` },
         { title: "3. ตำแหน่งหลักแรก (First Digit Analysis)", val: getTopFirstDigit(allNumbers), desc: "ประเมินความน่าจะเป็นของตัวเลขในตำแหน่งแรกสุด" },
         { title: "4. ตำแหน่งหลักท้าย (Last Digit Analysis)", val: getTopLastDigit(allNumbers), desc: "ประเมินความน่าจะเป็นของตัวเลขในตำแหน่งท้ายสุด" },
-        { title: "5. สมดุลสูง/ต่ำ (High/Low Ratio)", val: getHighLowTrend(digitCounts), desc: "สัดส่วนเปรียบเทียบกลุ่มตัวเลขต่ำ (0-4) และกลุ่มตัวเลขสูง (5-9)" },
-        { title: "6. สมดุลคู่/คี่ (Even/Odd Ratio)", val: getOddEvenTrend(digitCounts), desc: "วิเคราะห์ความสมดุลระหว่างกลุ่มตัวเลขคู่และตัวเลขคี่" },
+        { title: "5. สมดุลสูง/ต่ำ (High/Low Ratio)", val: getHighLowTrend(longTermCounts), desc: "สัดส่วนเปรียบเทียบกลุ่มตัวเลขต่ำ (0-4) และกลุ่มตัวเลขสูง (5-9)" },
+        { title: "6. สมดุลคู่/คี่ (Even/Odd Ratio)", val: getOddEvenTrend(longTermCounts), desc: "วิเคราะห์ความสมดุลระหว่างกลุ่มตัวเลขคู่และตัวเลขคี่" },
         { title: "7. ค่าเฉลี่ยผลรวม (Mean Sum Value)", val: getAverageSum(allNumbers), desc: "ค่าเฉลี่ยเลขคณิตของผลรวมตัวเลขทุกหลักในหมวดหมู่" },
         { title: "8. แนวโน้มลูกโซ่ (Markov Chain)", val: getMarkovNext(allNumbers), desc: "การคาดการณ์ตัวเลขสืบเนื่องจากผลการออกรางวัลงวดล่าสุด" },
-        { title: "9. ถ่วงน้ำหนักระยะใกล้ (Recency Weighted)", val: getWeightedRecent(allNumbers), desc: "ให้ดัชนีน้ำหนักความสำคัญแก่ข้อมูลสถิติงวดล่าสุดสูงสุด" },
-        { title: "10. การประมวลผลรวม (Composite Model)", val: `แนวทางเด่น: ${compositeNumber}`, desc: "การจับคู่โครงสร้างตัวเลขที่มีดัชนีความน่าจะเป็นสูงสุด" },
-        { title: "11. อัตราเร่ง 3 งวดล่าสุด (Short-Term Momentum)", val: getShortTermMomentum(allNumbers), desc: "วิเคราะห์อัตราเร่งความถี่เฉพาะสถิติ 3 งวดล่าสุด" },
-        { title: "12. ดัชนีตัวเลขหมุนเวียนต่ำ (Absolute Cold Digit)", val: `ตัวเลขดับ: ${dSecLast}`, desc: "ตัวเลขที่มีอัตราการหมุนเวียนปรากฏต่ำในลำดับรอง" },
-        { title: "13. การจับคู่ความถี่สูง (Top Pair Frequency)", val: `ชุดคู่เด่น: ${d0}-${d2}`, desc: "การจับคู่ระหว่างตัวเลขความถี่อันดับ 1 และอันดับ 3" },
+        { title: "9. ถ่วงน้ำหนักระยะใกล้ (Recency Weighted)", val: getWeightedRecent(allNumbers), desc: "ให้ดัชนีน้ำหนักความสำคัญแก่ข้อมูลสถิติงวดล่าสุด" },
+        { title: "10. การประมวลผลรวม (Composite Model)", val: `แนวทางเด่น: ${lt0}${lt1}`, desc: "การจับคู่โครงสร้างตัวเลขที่มีดัชนีความน่าจะเป็นสูงสุด" },
+        { title: "11. โมเมนตัม 5 งวดล่าสุด (Short-Term Momentum)", val: `ตัวเลขเร่ง: ${st0}`, desc: "วิเคราะห์ความถี่เฉพาะสถิติ 5 งวดล่าสุดเพื่อจับกระแส" },
+        { title: "12. ดัชนีตัวเลขดับลำดับสอง (Secondary Cold)", val: `ตัวเลขดับ: ${cold1}`, desc: "ตัวเลขที่มีอัตราการหมุนเวียนปรากฏต่ำในลำดับรอง" },
+        { title: "13. การจับคู่ความถี่สูง (Top Pair Frequency)", val: `ชุดคู่เด่น: ${lt0}-${lt2}`, desc: "การจับคู่ระหว่างตัวเลขความถี่อันดับ 1 และอันดับ 3" },
         { title: "14. ค่าส่วนต่างงวดล่าสุด (Delta Difference)", val: getDeltaDiff(allNumbers), desc: "ผลต่างเชิงจำนวนระหว่างหลักแรกและหลักท้ายงวดล่าสุด" },
-        { title: "15. พิสัยการกระจายตัว (Variance Dispersion)", val: `พิสัยความถี่: ${digitCounts[d0] - digitCounts[dLast]}`, desc: "ส่วนต่างความถี่ระหว่างตัวเลขที่ออกบ่อยที่สุดและน้อยที่สุด" },
+        { title: "15. พิสัยการกระจายตัว (Variance Dispersion)", val: `พิสัย: ${longTermCounts[lt0] - longTermCounts[cold0]}`, desc: "ส่วนต่างความถี่ระหว่างตัวเลขที่ออกบ่อยที่สุดและน้อยที่สุด" },
         { title: "16. ตำแหน่งหลักกลาง (Middle Digit Analysis)", val: getTopMiddleDigit(allNumbers), desc: "วิเคราะห์ตัวเลขที่มีอัตราความถี่สูงสุดในตำแหน่งกึ่งกลาง" },
-        { title: "17. การแจกแจงปัวซซง (Poisson Expected)", val: `ค่าคาดหมาย: ${d1}`, desc: "ตัวเลขที่มีค่าคาดหมายการกระจายตัวเข้าสู่จุดสมดุล" },
+        { title: "17. การแจกแจงปัวซซง (Poisson Expected)", val: `ค่าคาดหมาย: ${lt1}`, desc: "ตัวเลขที่มีค่าคาดหมายการกระจายตัวเข้าสู่จุดสมดุล" },
         { title: "18. ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)", val: getStdDevRange(allNumbers), desc: "ขอบเขตส่วนเบี่ยงเบนมาตรฐานของผลรวมตัวเลข" },
-        { title: "19. รอบวัฏจักรซ้ำ (Cyclic Repeat Trend)", val: `แนวโน้มซ้ำ: ${d0}`, desc: "ประเมินตัวเลขที่มีโอกาสปรากฏซ้ำตามรอบวัฏจักร" },
-        { title: "20. แบบจำลองสถิติรวม (Ensemble Meta-Model)", val: ensembleHTML, desc: "การประมวลผลร่วมจากแบบจำลองเป็น 3 โครงสร้างแนวทางหลัก" }
+        { title: "19. รอบวัฏจักรซ้ำ (Cyclic Repeat Trend)", val: `แนวโน้มซ้ำ: ${lt0}`, desc: "ประเมินตัวเลขที่มีโอกาสปรากฏซ้ำตามรอบวัฏจักร" },
+        { title: "20. แบบจำลองสถิติรวม 3 สาย (3-Horizon Ensemble)", val: ensembleHTML, desc: "สรุปการประมวลผลแบ่งตามสายสถิติตลอดกาล, สายสมดุล, และโมเมนตัมระยะสั้น" }
     ];
 }
 
@@ -468,16 +466,16 @@ function getTopLastDigit(list) {
 
 function getHighLowTrend(counts) {
     let low = 0, high = 0;
-    for(let i=0; i<=4; i++) low += counts[i];
-    for(let i=5; i<=9; i++) high += counts[i];
+    for(let i=0; i<=4; i++) low += counts[i] || 0;
+    for(let i=5; i<=9; i++) high += counts[i] || 0;
     return high > low ? "แนวโน้ม: กลุ่มเลขสูง (5-9)" : "แนวโน้ม: กลุ่มเลขต่ำ (0-4)";
 }
 
 function getOddEvenTrend(counts) {
     let even = 0, odd = 0;
     for(let i=0; i<=9; i++) {
-        if(i % 2 === 0) even += counts[i];
-        else odd += counts[i];
+        if(i % 2 === 0) even += counts[i] || 0;
+        else odd += counts[i] || 0;
     }
     return odd > even ? "ดัชนีเด่น: กลุ่มตัวเลขคี่" : "ดัชนีเด่น: กลุ่มตัวเลขคู่";
 }
@@ -501,17 +499,6 @@ function getMarkovNext(list) {
 function getWeightedRecent(list) {
     if(!list[0] || list[0].includes('─')) return "เน้นวิ่ง: -";
     return `เน้นวิ่ง: ${list[0][0]}`;
-}
-
-function getShortTermMomentum(list) {
-    const recent = list.slice(0, 3);
-    const counts = {};
-    recent.forEach(n => {
-        if(!n || n.includes('─')) return;
-        n.split('').forEach(d => counts[d] = (counts[d] || 0) + 1);
-    });
-    const top = Object.keys(counts).sort((a,b) => counts[b] - counts[a])[0];
-    return `ตัวเลขเร่งเด่น: ${top || '-'}`;
 }
 
 function getDeltaDiff(list) {
@@ -549,7 +536,6 @@ function getStdDevRange(list) {
 
 // --- 6. อัปเดต UI หน้าจอ ---
 function updateUI() {
-    // แสดงผลการ์ดประมวลผล 20 โมเดล
     const predContainer = document.getElementById('predictions-container');
     predContainer.innerHTML = '';
     const predictions = generate20Predictions();
@@ -565,7 +551,6 @@ function updateUI() {
         predContainer.appendChild(card);
     });
 
-    // แสดงผลตารางสถิตีย้อนหลัง
     const tbody = document.getElementById('history-table-body');
     tbody.innerHTML = '';
 
