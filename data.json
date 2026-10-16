@@ -1,145 +1,153 @@
-import json
-import re
-import time
-import requests
-from bs4 import BeautifulSoup
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    )
-}
-
-
-def clean_date_str(raw_text):
-    """สกัดเฉพาะวันที่ เช่น '16 ตุลาคม 2569' ออกมาจากข้อความรุงรัง"""
-    match = re.search(r"(\d{1,2}\s+[ก-ฮ\.]+\s+\d{4})", raw_text)
-    if match:
-        return match.group(1)
-    return None
-
-
-def scrape_sanook_archive(max_pages=24):
-    all_results = []
-    seen_dates = set()  # ใช้เช็กและป้องกันข้อมูลซ้ำซ้อน
-
-    print(
-        "🚀 เริ่มดึง คลีนข้อความ และลบข้อมูลซ้ำ ย้อนหลังสูงสุด"
-        f" {max_pages} หน้า..."
-    )
-
-    for page in range(1, max_pages + 1):
-        url = (
-            f"https://news.sanook.com/lotto/archive/p/{page}/"
-            if page > 1
-            else "https://news.sanook.com/lotto/archive/"
-        )
-
-        try:
-            res = requests.get(url, headers=HEADERS, timeout=15)
-            res.encoding = "utf-8"
-            if res.status_code != 200:
-                continue
-
-            soup = BeautifulSoup(res.text, "html.parser")
-            articles = soup.find_all(
-                "article", class_=re.compile(r"archive|lotto")
-            ) or soup.select("div.archive-list__item")
-
-            for art in articles:
-                try:
-                    title_tag = art.find(["h3", "h2", "a"])
-                    if not title_tag:
-                        continue
-
-                    title_text = title_tag.get_text(strip=True)
-                    date_str = clean_date_str(title_text)
-
-                    # ข้ามถ้าระบุวันที่ไม่ได้ หรือเปนงวดที่เคยเก็บบันทึกไปแล้ว
-                    if not date_str or date_str in seen_dates:
-                        continue
-
-                    body_text = art.get_text(" ", strip=True)
-
-                    # รางวัลที่ 1
-                    p1_match = re.search(
-                        r"รางวัลที่\s*1\s*(?:รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{6})",
-                        body_text,
-                    )
-                    first_prize = p1_match.group(1) if p1_match else ""
-
-                    # เลขหน้า 3 ตัว
-                    front3_match = re.search(
-                        r"เลขหน้า\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
-                        body_text,
-                    )
-                    front_three = (
-                        [front3_match.group(1), front3_match.group(2)]
-                        if front3_match
-                        else []
-                    )
-
-                    # เลขท้าย 3 ตัว
-                    last3_match = re.search(
-                        r"เลขท้าย\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
-                        body_text,
-                    )
-                    last_three = (
-                        [last3_match.group(1), last3_match.group(2)]
-                        if last3_match
-                        else []
-                    )
-
-                    # เลขท้าย 2 ตัว
-                    last2_match = re.search(
-                        r"เลขท้าย\s*2\s*ตัว\s*(?:1\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{2})",
-                        body_text,
-                    )
-                    last_two = last2_match.group(1) if last2_match else ""
-
-                    if first_prize and last_two:
-                        all_results.append({
-                            "date": date_str,
-                            "first_prize": first_prize,
-                            "front_three": front_three,
-                            "last_three": last_three,
-                            "last_two": last_two,
-                        })
-                        seen_dates.add(
-                            date_str
-                        )  # บันทึกวันที่ไว้เพื่อป้องกันการลงซ้ำ
-
-                except Exception:
-                    continue
-
-            time.sleep(0.5)
-
-        except Exception as e:
-            print(f"❌ เกิดข้อผิดพลาดในหน้า {page}: {e}")
-            continue
-
-    return all_results
-
-
-def main():
-    data = scrape_sanook_archive(max_pages=24)
-
-    output = {
-        "status": "online",
-        "total_records": len(data),
-        "history": data,
+{
+  "status": "online",
+  "total_records": 21,
+  "history": [
+    {
+      "date": "16 ตุลาคม 2569",
+      "first_prize": "011781",
+      "front_three": ["392", "402"],
+      "last_three": ["171", "255"],
+      "last_two": "48"
+    },
+    {
+      "date": "1 ตุลาคม 2569",
+      "first_prize": "402701",
+      "front_three": ["791", "912"],
+      "last_three": ["058", "396"],
+      "last_two": "70"
+    },
+    {
+      "date": "16 กันยายน 2569",
+      "first_prize": "730640",
+      "front_three": ["060", "521"],
+      "last_three": ["266", "041"],
+      "last_two": "64"
+    },
+    {
+      "date": "1 กันยายน 2569",
+      "first_prize": "417212",
+      "front_three": ["257", "346"],
+      "last_three": ["136", "740"],
+      "last_two": "04"
+    },
+    {
+      "date": "16 สิงหาคม 2569",
+      "first_prize": "004615",
+      "front_three": ["731", "429"],
+      "last_three": ["937", "094"],
+      "last_two": "53"
+    },
+    {
+      "date": "1 สิงหาคม 2569",
+      "first_prize": "932479",
+      "front_three": ["413", "672"],
+      "last_three": ["154", "039"],
+      "last_two": "69"
+    },
+    {
+      "date": "16 กรกฎาคม 2569",
+      "first_prize": "639214",
+      "front_three": ["683", "709"],
+      "last_three": ["746", "427"],
+      "last_two": "71"
+    },
+    {
+      "date": "1 กรกฎาคม 2569",
+      "first_prize": "751495",
+      "front_three": ["001", "980"],
+      "last_three": ["304", "531"],
+      "last_two": "62"
+    },
+    {
+      "date": "16 มิถุนายน 2569",
+      "first_prize": "287184",
+      "front_three": ["758", "434"],
+      "last_three": ["007", "721"],
+      "last_two": "48"
+    },
+    {
+      "date": "1 มิถุนายน 2569",
+      "first_prize": "173770",
+      "front_three": ["848", "415"],
+      "last_three": ["410", "938"],
+      "last_two": "95"
+    },
+    {
+      "date": "16 พฤษภาคม 2569",
+      "first_prize": "107387",
+      "front_three": ["091", "298"],
+      "last_three": ["602", "716"],
+      "last_two": "08"
+    },
+    {
+      "date": "2 พฤษภาคม 2569",
+      "first_prize": "536077",
+      "front_three": ["267", "318"],
+      "last_three": ["065", "153"],
+      "last_two": "43"
+    },
+    {
+      "date": "16 เมษายน 2569",
+      "first_prize": "309612",
+      "front_three": ["355", "108"],
+      "last_three": ["868", "424"],
+      "last_two": "77"
+    },
+    {
+      "date": "1 เมษายน 2569",
+      "first_prize": "292514",
+      "front_three": ["406", "113"],
+      "last_three": ["851", "098"],
+      "last_two": "47"
+    },
+    {
+      "date": "16 มีนาคม 2569",
+      "first_prize": "833009",
+      "front_three": ["510", "983"],
+      "last_three": ["439", "954"],
+      "last_two": "64"
+    },
+    {
+      "date": "1 มีนาคม 2569",
+      "first_prize": "820866",
+      "front_three": ["479", "054"],
+      "last_three": ["068", "837"],
+      "last_two": "06"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2569",
+      "first_prize": "340563",
+      "front_three": ["527", "241"],
+      "last_three": ["578", "169"],
+      "last_two": "07"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2569",
+      "first_prize": "174629",
+      "front_three": ["917", "195"],
+      "last_three": ["408", "041"],
+      "last_two": "48"
+    },
+    {
+      "date": "17 มกราคม 2569",
+      "first_prize": "878972",
+      "front_three": ["299", "815"],
+      "last_three": ["662", "363"],
+      "last_two": "02"
+    },
+    {
+      "date": "2 มกราคม 2569",
+      "first_prize": "837706",
+      "front_three": ["347", "694"],
+      "last_three": ["288", "765"],
+      "last_two": "16"
+    },
+    {
+      "date": "16 ธันวาคม 2568",
+      "first_prize": "763895",
+      "front_three": ["431", "176"],
+      "last_three": ["014", "449"],
+      "last_two": "52"
     }
-
-    with open("data.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-
-    print(
-        "\n🎉 สำเร็จ! คลีนข้อมูลและตัดงวดซ้ำออกเรียบร้อยแล้ว ได้ข้อมูลทั้งหมด"
-        f" {len(data)} งวด"
-    )
-
-
-if __name__ == "__main__":
-    main()
+  ]
+}
