@@ -2,11 +2,11 @@ name: auto-fetch
 
 on:
   schedule:
-    - cron: '0 10 1,16 * *'  # รันอัตโนมัติทุกวันที่ 1 และ 16
-  workflow_dispatch:          # เปิดให้กด Run manual เองได้
+    - cron: '0 10 1,16 * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write             # ให้สิทธิ์บันทึกและ push ไฟล์ลง Repo
+  contents: write
 
 jobs:
   run-bot:
@@ -25,12 +25,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run sync_lottery script
+      - name: Run Scraper Bot
         run: python sync_lottery.py
 
-      - name: Commit and push updated data
+      - name: Commit and Push if New Data Found
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git diff --staged --quiet || (git commit -m "Auto-update lottery data" && git push)
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update lottery data"
+            git pull --rebase origin main
+            git push
+          fi
