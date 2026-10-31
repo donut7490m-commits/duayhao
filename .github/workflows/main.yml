@@ -40,4 +40,7 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update lottery data"
             git push origin main
+          fin
+            git commit -m "Auto-update lottery data"
+            git push origin main
           fi
