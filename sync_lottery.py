@@ -12,9 +12,8 @@ HEADERS = {
     )
 }
 
-
 def clean_date_str(raw_text):
-    """สกัดเฉพาะวันที่ เช่น '16 ตุลาคม 2569' ออกมาจากข้อความ"""
+    """สกัดเฉพาะวันที่ เช่น '16 ตุลาคม 2569'"""
     match = re.search(r"(\d{1,2}\s+[ก-ฮ\.]+\s+\d{2,4})", raw_text)
     if match:
         date_part = match.group(1)
@@ -24,18 +23,14 @@ def clean_date_str(raw_text):
         return " ".join(parts)
     return None
 
-
-def scrape_sanook_archive(max_pages=50):
+def scrape_sanook_archive(max_pages=8):
+    """ดึงข้อมูลย้อนหลังประมาณ 3 ปี (8 หน้า x 9-10 งวด = ~72 งวด)"""
     all_results = []
     seen_dates = set()
 
-    print(
-        "🚀 เริ่มดึงข้อมูลสลากย้อนหลังย้อนไปถึงปี 2550 จาก Sanook Archive (1 -"
-        f" {max_pages} หน้า)..."
-    )
+    print(f"🚀 เริ่มดึงข้อมูลสลากย้อนหลัง 3 ปีจาก Sanook Archive (หน้า 1 - {max_pages})...")
 
     for page in range(1, max_pages + 1):
-        # แก้ไข URL ให้ตรงกับโครงสร้างจริงของ Sanook (/archive/page/{page}/)
         url = (
             f"https://news.sanook.com/lotto/archive/page/{page}/"
             if page > 1
@@ -44,14 +39,11 @@ def scrape_sanook_archive(max_pages=50):
         print(f"📖 [{page}/{max_pages}] กำลังดึงข้อมูลจาก: {url}")
 
         try:
-            res = requests.get(url, headers=HEADERS, timeout=15)
+            res = requests.get(url, headers=HEADERS, timeout=10)
             res.encoding = "utf-8"
 
             if res.status_code != 200:
-                print(
-                    f"⚠️ หน้า {page} ตอบกลับด้วย HTTP {res.status_code}"
-                    " (ข้ามหน้านี้)"
-                )
+                print(f"⚠️ หน้า {page} ตอบกลับด้วย HTTP {res.status_code}")
                 continue
 
             soup = BeautifulSoup(res.text, "html.parser")
@@ -74,14 +66,14 @@ def scrape_sanook_archive(max_pages=50):
 
                     body_text = art.get_text(" ", strip=True)
 
-                    # 1. รางวัลที่ 1 (6 หลัก)
+                    # 1. รางวัลที่ 1
                     p1_match = re.search(
                         r"รางวัลที่\s*1\s*(?:รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{6})",
                         body_text,
                     )
                     first_prize = p1_match.group(1) if p1_match else ""
 
-                    # 2. เลขหน้า 3 ตัว (ถ้ามี)
+                    # 2. เลขหน้า 3 ตัว
                     front3_match = re.search(
                         r"เลขหน้า\s*3\s*ตัว\s*(?:2\s*รางวัลละ\s*[\d,]+\s*บาท)?\s*(\d{3})\s*(\d{3})",
                         body_text,
@@ -124,11 +116,8 @@ def scrape_sanook_archive(max_pages=50):
                 except Exception:
                     continue
 
-            print(
-                f"   └─ เพิ่มงวดใหม่จากหน้า {page}: {page_count} งวด (สะสมรวม"
-                f" {len(all_results)} งวด)"
-            )
-            time.sleep(0.4)
+            print(f"   └─ ได้รับข้อมูลจากหน้า {page}: {page_count} งวด (สะสม {len(all_results)} งวด)")
+            time.sleep(0.3)
 
         except Exception as e:
             print(f"❌ เกิดข้อผิดพลาดในหน้า {page}: {e}")
@@ -136,9 +125,8 @@ def scrape_sanook_archive(max_pages=50):
 
     return all_results
 
-
 def main():
-    data = scrape_sanook_archive(max_pages=50)
+    data = scrape_sanook_archive(max_pages=8)
 
     output = {
         "status": "online",
@@ -149,11 +137,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(
-        f"\n🎉 ดึงข้อมูลเสร็จสิ้น! ได้ข้อมูลย้อนหลังรวม {len(data)} งวด"
-        " บันทึกลง data.json เรียบร้อยครับ"
-    )
-
+    print(f"\n🎉 บันทึกข้อมูลย้อนหลัง 3 ปี รวม {len(data)} งวด ลง data.json สำเร็จ!")
 
 if __name__ == "__main__":
     main()
