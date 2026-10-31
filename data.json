@@ -1,5 +1,2086 @@
 {
   "status": "online",
-  "total_records": 0,
-  "history": []
+  "total_records": 160,
+  "history": [
+    {
+      "date": "16 ตุลาคม 2569",
+      "first_prize": "011781",
+      "front_three": [
+        "392",
+        "402"
+      ],
+      "last_three": [
+        "171",
+        "255"
+      ],
+      "last_two": "48"
+    },
+    {
+      "date": "1 ตุลาคม 2569",
+      "first_prize": "402701",
+      "front_three": [
+        "791",
+        "912"
+      ],
+      "last_three": [
+        "058",
+        "396"
+      ],
+      "last_two": "70"
+    },
+    {
+      "date": "16 กันยายน 2569",
+      "first_prize": "730640",
+      "front_three": [
+        "060",
+        "521"
+      ],
+      "last_three": [
+        "266",
+        "041"
+      ],
+      "last_two": "64"
+    },
+    {
+      "date": "1 กันยายน 2569",
+      "first_prize": "417212",
+      "front_three": [
+        "257",
+        "346"
+      ],
+      "last_three": [
+        "136",
+        "740"
+      ],
+      "last_two": "04"
+    },
+    {
+      "date": "16 สิงหาคม 2569",
+      "first_prize": "004615",
+      "front_three": [
+        "731",
+        "429"
+      ],
+      "last_three": [
+        "937",
+        "094"
+      ],
+      "last_two": "53"
+    },
+    {
+      "date": "1 สิงหาคม 2569",
+      "first_prize": "932479",
+      "front_three": [
+        "413",
+        "672"
+      ],
+      "last_three": [
+        "154",
+        "039"
+      ],
+      "last_two": "69"
+    },
+    {
+      "date": "16 กรกฎาคม 2569",
+      "first_prize": "639214",
+      "front_three": [
+        "683",
+        "709"
+      ],
+      "last_three": [
+        "746",
+        "427"
+      ],
+      "last_two": "71"
+    },
+    {
+      "date": "1 กรกฎาคม 2569",
+      "first_prize": "751495",
+      "front_three": [
+        "001",
+        "980"
+      ],
+      "last_three": [
+        "304",
+        "531"
+      ],
+      "last_two": "62"
+    },
+    {
+      "date": "16 มิถุนายน 2569",
+      "first_prize": "287184",
+      "front_three": [
+        "758",
+        "434"
+      ],
+      "last_three": [
+        "007",
+        "721"
+      ],
+      "last_two": "48"
+    },
+    {
+      "date": "1 มิถุนายน 2569",
+      "first_prize": "173770",
+      "front_three": [
+        "848",
+        "415"
+      ],
+      "last_three": [
+        "410",
+        "938"
+      ],
+      "last_two": "95"
+    },
+    {
+      "date": "16 พฤษภาคม 2569",
+      "first_prize": "107387",
+      "front_three": [
+        "091",
+        "298"
+      ],
+      "last_three": [
+        "602",
+        "716"
+      ],
+      "last_two": "08"
+    },
+    {
+      "date": "2 พฤษภาคม 2569",
+      "first_prize": "536077",
+      "front_three": [
+        "267",
+        "318"
+      ],
+      "last_three": [
+        "065",
+        "153"
+      ],
+      "last_two": "43"
+    },
+    {
+      "date": "16 เมษายน 2569",
+      "first_prize": "309612",
+      "front_three": [
+        "355",
+        "108"
+      ],
+      "last_three": [
+        "868",
+        "424"
+      ],
+      "last_two": "77"
+    },
+    {
+      "date": "1 เมษายน 2569",
+      "first_prize": "292514",
+      "front_three": [
+        "406",
+        "113"
+      ],
+      "last_three": [
+        "851",
+        "098"
+      ],
+      "last_two": "47"
+    },
+    {
+      "date": "16 มีนาคม 2569",
+      "first_prize": "833009",
+      "front_three": [
+        "510",
+        "983"
+      ],
+      "last_three": [
+        "439",
+        "954"
+      ],
+      "last_two": "64"
+    },
+    {
+      "date": "1 มีนาคม 2569",
+      "first_prize": "820866",
+      "front_three": [
+        "479",
+        "054"
+      ],
+      "last_three": [
+        "068",
+        "837"
+      ],
+      "last_two": "06"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2569",
+      "first_prize": "340563",
+      "front_three": [
+        "527",
+        "241"
+      ],
+      "last_three": [
+        "578",
+        "169"
+      ],
+      "last_two": "07"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2569",
+      "first_prize": "174629",
+      "front_three": [
+        "917",
+        "195"
+      ],
+      "last_three": [
+        "408",
+        "041"
+      ],
+      "last_two": "48"
+    },
+    {
+      "date": "17 มกราคม 2569",
+      "first_prize": "878972",
+      "front_three": [
+        "299",
+        "815"
+      ],
+      "last_three": [
+        "662",
+        "363"
+      ],
+      "last_two": "02"
+    },
+    {
+      "date": "2 มกราคม 2569",
+      "first_prize": "837706",
+      "front_three": [
+        "347",
+        "694"
+      ],
+      "last_three": [
+        "288",
+        "765"
+      ],
+      "last_two": "16"
+    },
+    {
+      "date": "16 ธันวาคม 2568",
+      "first_prize": "763895",
+      "front_three": [
+        "431",
+        "176"
+      ],
+      "last_three": [
+        "014",
+        "449"
+      ],
+      "last_two": "52"
+    },
+    {
+      "date": "1 ธันวาคม 2568",
+      "first_prize": "461252",
+      "front_three": [
+        "655",
+        "389"
+      ],
+      "last_three": [
+        "137",
+        "995"
+      ],
+      "last_two": "22"
+    },
+    {
+      "date": "16 พฤศจิกายน 2568",
+      "first_prize": "458145",
+      "front_three": [
+        "242",
+        "602"
+      ],
+      "last_three": [
+        "239",
+        "389"
+      ],
+      "last_two": "37"
+    },
+    {
+      "date": "1 พฤศจิกายน 2568",
+      "first_prize": "345898",
+      "front_three": [
+        "449",
+        "328"
+      ],
+      "last_three": [
+        "111",
+        "690"
+      ],
+      "last_two": "87"
+    },
+    {
+      "date": "16 ตุลาคม 2568",
+      "first_prize": "059696",
+      "front_three": [
+        "531",
+        "955"
+      ],
+      "last_three": [
+        "476",
+        "889"
+      ],
+      "last_two": "61"
+    },
+    {
+      "date": "1 ตุลาคม 2568",
+      "first_prize": "876978",
+      "front_three": [
+        "843",
+        "532"
+      ],
+      "last_three": [
+        "280",
+        "605"
+      ],
+      "last_two": "77"
+    },
+    {
+      "date": "16 กันยายน 2568",
+      "first_prize": "074646",
+      "front_three": [
+        "512",
+        "740"
+      ],
+      "last_three": [
+        "308",
+        "703"
+      ],
+      "last_two": "58"
+    },
+    {
+      "date": "1 กันยายน 2568",
+      "first_prize": "506356",
+      "front_three": [
+        "131",
+        "012"
+      ],
+      "last_three": [
+        "022",
+        "209"
+      ],
+      "last_two": "31"
+    },
+    {
+      "date": "16 สิงหาคม 2568",
+      "first_prize": "994865",
+      "front_three": [
+        "247",
+        "602"
+      ],
+      "last_three": [
+        "834",
+        "989"
+      ],
+      "last_two": "63"
+    },
+    {
+      "date": "1 สิงหาคม 2568",
+      "first_prize": "811852",
+      "front_three": [
+        "142",
+        "525"
+      ],
+      "last_three": [
+        "512",
+        "891"
+      ],
+      "last_two": "50"
+    },
+    {
+      "date": "16 กรกฎาคม 2568",
+      "first_prize": "245324",
+      "front_three": [
+        "995",
+        "171"
+      ],
+      "last_three": [
+        "084",
+        "336"
+      ],
+      "last_two": "26"
+    },
+    {
+      "date": "1 กรกฎาคม 2568",
+      "first_prize": "949246",
+      "front_three": [
+        "680",
+        "169"
+      ],
+      "last_three": [
+        "918",
+        "261"
+      ],
+      "last_two": "91"
+    },
+    {
+      "date": "16 มิถุนายน 2568",
+      "first_prize": "507392",
+      "front_three": [
+        "243",
+        "017"
+      ],
+      "last_three": [
+        "299",
+        "736"
+      ],
+      "last_two": "06"
+    },
+    {
+      "date": "1 มิถุนายน 2568",
+      "first_prize": "559352",
+      "front_three": [
+        "349",
+        "134"
+      ],
+      "last_three": [
+        "307",
+        "044"
+      ],
+      "last_two": "20"
+    },
+    {
+      "date": "16 พฤษภาคม 2568",
+      "first_prize": "251309",
+      "front_three": [
+        "109",
+        "231"
+      ],
+      "last_three": [
+        "965",
+        "631"
+      ],
+      "last_two": "87"
+    },
+    {
+      "date": "2 พฤษภาคม 2568",
+      "first_prize": "213388",
+      "front_three": [
+        "826",
+        "116"
+      ],
+      "last_three": [
+        "167",
+        "662"
+      ],
+      "last_two": "06"
+    },
+    {
+      "date": "16 เมษายน 2568",
+      "first_prize": "266227",
+      "front_three": [
+        "413",
+        "254"
+      ],
+      "last_three": [
+        "474",
+        "760"
+      ],
+      "last_two": "85"
+    },
+    {
+      "date": "1 เมษายน 2568",
+      "first_prize": "669687",
+      "front_three": [
+        "635",
+        "760"
+      ],
+      "last_three": [
+        "180",
+        "666"
+      ],
+      "last_two": "36"
+    },
+    {
+      "date": "16 มีนาคม 2568",
+      "first_prize": "757563",
+      "front_three": [
+        "595",
+        "927"
+      ],
+      "last_three": [
+        "457",
+        "309"
+      ],
+      "last_two": "32"
+    },
+    {
+      "date": "1 มีนาคม 2568",
+      "first_prize": "818894",
+      "front_three": [
+        "139",
+        "530"
+      ],
+      "last_three": [
+        "656",
+        "781"
+      ],
+      "last_two": "54"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2568",
+      "first_prize": "847377",
+      "front_three": [
+        "268",
+        "613"
+      ],
+      "last_three": [
+        "652",
+        "001"
+      ],
+      "last_two": "50"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2568",
+      "first_prize": "558700",
+      "front_three": [
+        "285",
+        "418"
+      ],
+      "last_three": [
+        "685",
+        "824"
+      ],
+      "last_two": "51"
+    },
+    {
+      "date": "17 มกราคม 2568",
+      "first_prize": "807779",
+      "front_three": [
+        "699",
+        "961"
+      ],
+      "last_three": [
+        "448",
+        "477"
+      ],
+      "last_two": "23"
+    },
+    {
+      "date": "2 มกราคม 2568",
+      "first_prize": "730209",
+      "front_three": [
+        "446",
+        "065"
+      ],
+      "last_three": [
+        "376",
+        "297"
+      ],
+      "last_two": "51"
+    },
+    {
+      "date": "16 ธันวาคม 2567",
+      "first_prize": "097863",
+      "front_three": [
+        "290",
+        "742"
+      ],
+      "last_three": [
+        "339",
+        "881"
+      ],
+      "last_two": "21"
+    },
+    {
+      "date": "1 ธันวาคม 2567",
+      "first_prize": "669843",
+      "front_three": [
+        "559",
+        "626"
+      ],
+      "last_three": [
+        "098",
+        "654"
+      ],
+      "last_two": "61"
+    },
+    {
+      "date": "16 พฤศจิกายน 2567",
+      "first_prize": "187221",
+      "front_three": [
+        "036",
+        "923"
+      ],
+      "last_three": [
+        "980",
+        "547"
+      ],
+      "last_two": "38"
+    },
+    {
+      "date": "1 พฤศจิกายน 2567",
+      "first_prize": "536044",
+      "front_three": [
+        "174",
+        "225"
+      ],
+      "last_three": [
+        "063",
+        "231"
+      ],
+      "last_two": "32"
+    },
+    {
+      "date": "16 ตุลาคม 2567",
+      "first_prize": "482962",
+      "front_three": [
+        "561",
+        "648"
+      ],
+      "last_three": [
+        "493",
+        "919"
+      ],
+      "last_two": "00"
+    },
+    {
+      "date": "1 ตุลาคม 2567",
+      "first_prize": "718665",
+      "front_three": [
+        "053",
+        "812"
+      ],
+      "last_three": [
+        "079",
+        "566"
+      ],
+      "last_two": "59"
+    },
+    {
+      "date": "16 กันยายน 2567",
+      "first_prize": "608662",
+      "front_three": [
+        "230",
+        "904"
+      ],
+      "last_three": [
+        "008",
+        "408"
+      ],
+      "last_two": "37"
+    },
+    {
+      "date": "1 กันยายน 2567",
+      "first_prize": "199606",
+      "front_three": [
+        "173",
+        "220"
+      ],
+      "last_three": [
+        "094",
+        "388"
+      ],
+      "last_two": "94"
+    },
+    {
+      "date": "16 สิงหาคม 2567",
+      "first_prize": "095867",
+      "front_three": [
+        "212",
+        "334"
+      ],
+      "last_three": [
+        "697",
+        "728"
+      ],
+      "last_two": "28"
+    },
+    {
+      "date": "1 สิงหาคม 2567",
+      "first_prize": "407041",
+      "front_three": [
+        "408",
+        "579"
+      ],
+      "last_three": [
+        "622",
+        "070"
+      ],
+      "last_two": "46"
+    },
+    {
+      "date": "16 กรกฎาคม 2567",
+      "first_prize": "367336",
+      "front_three": [
+        "011",
+        "331"
+      ],
+      "last_three": [
+        "421",
+        "618"
+      ],
+      "last_two": "21"
+    },
+    {
+      "date": "1 กรกฎาคม 2567",
+      "first_prize": "434503",
+      "front_three": [
+        "839",
+        "975"
+      ],
+      "last_three": [
+        "647",
+        "778"
+      ],
+      "last_two": "89"
+    },
+    {
+      "date": "16 มิถุนายน 2567",
+      "first_prize": "518504",
+      "front_three": [
+        "016",
+        "428"
+      ],
+      "last_three": [
+        "426",
+        "447"
+      ],
+      "last_two": "31"
+    },
+    {
+      "date": "1 มิถุนายน 2567",
+      "first_prize": "530593",
+      "front_three": [
+        "194",
+        "364"
+      ],
+      "last_three": [
+        "421",
+        "734"
+      ],
+      "last_two": "42"
+    },
+    {
+      "date": "16 พฤษภาคม 2567",
+      "first_prize": "205690",
+      "front_three": [
+        "885",
+        "747"
+      ],
+      "last_three": [
+        "137",
+        "070"
+      ],
+      "last_two": "60"
+    },
+    {
+      "date": "2 พฤษภาคม 2567",
+      "first_prize": "980116",
+      "front_three": [
+        "104",
+        "763"
+      ],
+      "last_three": [
+        "634",
+        "833"
+      ],
+      "last_two": "17"
+    },
+    {
+      "date": "16 เมษายน 2567",
+      "first_prize": "943598",
+      "front_three": [
+        "729",
+        "727"
+      ],
+      "last_three": [
+        "154",
+        "200"
+      ],
+      "last_two": "79"
+    },
+    {
+      "date": "1 เมษายน 2567",
+      "first_prize": "803481",
+      "front_three": [
+        "122",
+        "809"
+      ],
+      "last_three": [
+        "559",
+        "947"
+      ],
+      "last_two": "90"
+    },
+    {
+      "date": "16 มีนาคม 2567",
+      "first_prize": "997626",
+      "front_three": [
+        "571",
+        "509"
+      ],
+      "last_three": [
+        "794",
+        "329"
+      ],
+      "last_two": "78"
+    },
+    {
+      "date": "1 มีนาคม 2567",
+      "first_prize": "253603",
+      "front_three": [
+        "900",
+        "975"
+      ],
+      "last_three": [
+        "382",
+        "703"
+      ],
+      "last_two": "79"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2567",
+      "first_prize": "941395",
+      "front_three": [
+        "056",
+        "330"
+      ],
+      "last_three": [
+        "587",
+        "375"
+      ],
+      "last_two": "43"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2567",
+      "first_prize": "607063",
+      "front_three": [
+        "454",
+        "943"
+      ],
+      "last_three": [
+        "544",
+        "591"
+      ],
+      "last_two": "09"
+    },
+    {
+      "date": "17 มกราคม 2567",
+      "first_prize": "105979",
+      "front_three": [
+        "429",
+        "931"
+      ],
+      "last_three": [
+        "196",
+        "635"
+      ],
+      "last_two": "61"
+    },
+    {
+      "date": "30 ธันวาคม 2566",
+      "first_prize": "625544",
+      "front_three": [
+        "600",
+        "648"
+      ],
+      "last_three": [
+        "882",
+        "456"
+      ],
+      "last_two": "89"
+    },
+    {
+      "date": "16 ธันวาคม 2566",
+      "first_prize": "356757",
+      "front_three": [
+        "058",
+        "410"
+      ],
+      "last_three": [
+        "584",
+        "964"
+      ],
+      "last_two": "85"
+    },
+    {
+      "date": "1 ธันวาคม 2566",
+      "first_prize": "251097",
+      "front_three": [
+        "055",
+        "265"
+      ],
+      "last_three": [
+        "092",
+        "280"
+      ],
+      "last_two": "91"
+    },
+    {
+      "date": "16 พฤศจิกายน 2566",
+      "first_prize": "557990",
+      "front_three": [
+        "346",
+        "412"
+      ],
+      "last_three": [
+        "778",
+        "961"
+      ],
+      "last_two": "14"
+    },
+    {
+      "date": "1 พฤศจิกายน 2566",
+      "first_prize": "743951",
+      "front_three": [
+        "335",
+        "913"
+      ],
+      "last_three": [
+        "019",
+        "349"
+      ],
+      "last_two": "63"
+    },
+    {
+      "date": "16 ตุลาคม 2566",
+      "first_prize": "931446",
+      "front_three": [
+        "167",
+        "398"
+      ],
+      "last_three": [
+        "272",
+        "970"
+      ],
+      "last_two": "44"
+    },
+    {
+      "date": "1 ตุลาคม 2566",
+      "first_prize": "727202",
+      "front_three": [
+        "355",
+        "324"
+      ],
+      "last_three": [
+        "426",
+        "615"
+      ],
+      "last_two": "66"
+    },
+    {
+      "date": "16 กันยายน 2566",
+      "first_prize": "320812",
+      "front_three": [
+        "037",
+        "699"
+      ],
+      "last_three": [
+        "057",
+        "344"
+      ],
+      "last_two": "46"
+    },
+    {
+      "date": "1 กันยายน 2566",
+      "first_prize": "915478",
+      "front_three": [
+        "521",
+        "596"
+      ],
+      "last_three": [
+        "692",
+        "291"
+      ],
+      "last_two": "91"
+    },
+    {
+      "date": "16 สิงหาคม 2566",
+      "first_prize": "471782",
+      "front_three": [
+        "431",
+        "739"
+      ],
+      "last_three": [
+        "737",
+        "742"
+      ],
+      "last_two": "67"
+    },
+    {
+      "date": "31 กรกฎาคม 2566",
+      "first_prize": "260453",
+      "front_three": [
+        "268",
+        "708"
+      ],
+      "last_three": [
+        "387",
+        "601"
+      ],
+      "last_two": "11"
+    },
+    {
+      "date": "16 กรกฎาคม 2566",
+      "first_prize": "169530",
+      "front_three": [
+        "261",
+        "384"
+      ],
+      "last_three": [
+        "066",
+        "780"
+      ],
+      "last_two": "62"
+    },
+    {
+      "date": "1 กรกฎาคม 2566",
+      "first_prize": "922605",
+      "front_three": [
+        "281",
+        "867"
+      ],
+      "last_three": [
+        "491",
+        "947"
+      ],
+      "last_two": "16"
+    },
+    {
+      "date": "16 มิถุนายน 2566",
+      "first_prize": "264872",
+      "front_three": [
+        "519",
+        "628"
+      ],
+      "last_three": [
+        "202",
+        "874"
+      ],
+      "last_two": "30"
+    },
+    {
+      "date": "1 มิถุนายน 2566",
+      "first_prize": "125272",
+      "front_three": [
+        "000",
+        "681"
+      ],
+      "last_three": [
+        "386",
+        "971"
+      ],
+      "last_two": "09"
+    },
+    {
+      "date": "16 พฤษภาคม 2566",
+      "first_prize": "132903",
+      "front_three": [
+        "739",
+        "678"
+      ],
+      "last_three": [
+        "693",
+        "731"
+      ],
+      "last_two": "99"
+    },
+    {
+      "date": "2 พฤษภาคม 2566",
+      "first_prize": "843019",
+      "front_three": [
+        "500",
+        "780"
+      ],
+      "last_three": [
+        "269",
+        "187"
+      ],
+      "last_two": "65"
+    },
+    {
+      "date": "16 เมษายน 2566",
+      "first_prize": "984906",
+      "front_three": [
+        "670",
+        "678"
+      ],
+      "last_three": [
+        "797",
+        "551"
+      ],
+      "last_two": "71"
+    },
+    {
+      "date": "1 เมษายน 2566",
+      "first_prize": "087907",
+      "front_three": [
+        "111",
+        "914"
+      ],
+      "last_three": [
+        "290",
+        "698"
+      ],
+      "last_two": "99"
+    },
+    {
+      "date": "16 มีนาคม 2566",
+      "first_prize": "025873",
+      "front_three": [
+        "420",
+        "800"
+      ],
+      "last_three": [
+        "355",
+        "544"
+      ],
+      "last_two": "73"
+    },
+    {
+      "date": "1 มีนาคม 2566",
+      "first_prize": "417652",
+      "front_three": [
+        "577",
+        "919"
+      ],
+      "last_three": [
+        "748",
+        "984"
+      ],
+      "last_two": "55"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2566",
+      "first_prize": "590417",
+      "front_three": [
+        "195",
+        "664"
+      ],
+      "last_three": [
+        "377",
+        "523"
+      ],
+      "last_two": "80"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2566",
+      "first_prize": "297411",
+      "front_three": [
+        "181",
+        "789"
+      ],
+      "last_three": [
+        "101",
+        "664"
+      ],
+      "last_two": "92"
+    },
+    {
+      "date": "17 มกราคม 2566",
+      "first_prize": "812519",
+      "front_three": [
+        "389",
+        "443"
+      ],
+      "last_three": [
+        "564",
+        "849"
+      ],
+      "last_two": "47"
+    },
+    {
+      "date": "30 ธันวาคม 2565",
+      "first_prize": "157196",
+      "front_three": [
+        "007",
+        "522"
+      ],
+      "last_three": [
+        "250",
+        "425"
+      ],
+      "last_two": "58"
+    },
+    {
+      "date": "16 ธันวาคม 2565",
+      "first_prize": "845093",
+      "front_three": [
+        "912",
+        "411"
+      ],
+      "last_three": [
+        "855",
+        "593"
+      ],
+      "last_two": "14"
+    },
+    {
+      "date": "1 ธันวาคม 2565",
+      "first_prize": "375805",
+      "front_three": [
+        "170",
+        "786"
+      ],
+      "last_three": [
+        "409",
+        "421"
+      ],
+      "last_two": "08"
+    },
+    {
+      "date": "16 พฤศจิกายน 2565",
+      "first_prize": "121789",
+      "front_three": [
+        "722",
+        "532"
+      ],
+      "last_three": [
+        "157",
+        "973"
+      ],
+      "last_two": "64"
+    },
+    {
+      "date": "1 พฤศจิกายน 2565",
+      "first_prize": "913106",
+      "front_three": [
+        "722",
+        "839"
+      ],
+      "last_three": [
+        "343",
+        "922"
+      ],
+      "last_two": "70"
+    },
+    {
+      "date": "16 ตุลาคม 2565",
+      "first_prize": "613106",
+      "front_three": [
+        "037",
+        "158"
+      ],
+      "last_three": [
+        "606",
+        "799"
+      ],
+      "last_two": "15"
+    },
+    {
+      "date": "1 ตุลาคม 2565",
+      "first_prize": "484669",
+      "front_three": [
+        "206",
+        "996"
+      ],
+      "last_three": [
+        "194",
+        "278"
+      ],
+      "last_two": "50"
+    },
+    {
+      "date": "16 กันยายน 2565",
+      "first_prize": "943703",
+      "front_three": [
+        "971",
+        "540"
+      ],
+      "last_three": [
+        "631",
+        "432"
+      ],
+      "last_two": "75"
+    },
+    {
+      "date": "1 กันยายน 2565",
+      "first_prize": "929332",
+      "front_three": [
+        "298",
+        "725"
+      ],
+      "last_three": [
+        "210",
+        "604"
+      ],
+      "last_two": "83"
+    },
+    {
+      "date": "16 สิงหาคม 2565",
+      "first_prize": "331583",
+      "front_three": [
+        "271",
+        "300"
+      ],
+      "last_three": [
+        "284",
+        "876"
+      ],
+      "last_two": "42"
+    },
+    {
+      "date": "1 สิงหาคม 2565",
+      "first_prize": "436594",
+      "front_three": [
+        "893",
+        "266"
+      ],
+      "last_three": [
+        "447",
+        "282"
+      ],
+      "last_two": "14"
+    },
+    {
+      "date": "16 กรกฎาคม 2565",
+      "first_prize": "620405",
+      "front_three": [
+        "159",
+        "834"
+      ],
+      "last_three": [
+        "061",
+        "279"
+      ],
+      "last_two": "53"
+    },
+    {
+      "date": "1 กรกฎาคม 2565",
+      "first_prize": "981417",
+      "front_three": [
+        "287",
+        "242"
+      ],
+      "last_three": [
+        "002",
+        "542"
+      ],
+      "last_two": "61"
+    },
+    {
+      "date": "16 มิถุนายน 2565",
+      "first_prize": "361807",
+      "front_three": [
+        "549",
+        "285"
+      ],
+      "last_three": [
+        "228",
+        "106"
+      ],
+      "last_two": "92"
+    },
+    {
+      "date": "1 มิถุนายน 2565",
+      "first_prize": "319196",
+      "front_three": [
+        "679",
+        "817"
+      ],
+      "last_three": [
+        "213",
+        "652"
+      ],
+      "last_two": "02"
+    },
+    {
+      "date": "16 พฤษภาคม 2565",
+      "first_prize": "155012",
+      "front_three": [
+        "247",
+        "736"
+      ],
+      "last_three": [
+        "236",
+        "540"
+      ],
+      "last_two": "06"
+    },
+    {
+      "date": "2 พฤษภาคม 2565",
+      "first_prize": "658642",
+      "front_three": [
+        "778",
+        "518"
+      ],
+      "last_three": [
+        "041",
+        "325"
+      ],
+      "last_two": "09"
+    },
+    {
+      "date": "16 เมษายน 2565",
+      "first_prize": "395919",
+      "front_three": [
+        "289",
+        "859"
+      ],
+      "last_three": [
+        "413",
+        "508"
+      ],
+      "last_two": "58"
+    },
+    {
+      "date": "1 เมษายน 2565",
+      "first_prize": "970618",
+      "front_three": [
+        "738",
+        "391"
+      ],
+      "last_three": [
+        "578",
+        "870"
+      ],
+      "last_two": "10"
+    },
+    {
+      "date": "16 มีนาคม 2565",
+      "first_prize": "737867",
+      "front_three": [
+        "349",
+        "985"
+      ],
+      "last_three": [
+        "989",
+        "788"
+      ],
+      "last_two": "03"
+    },
+    {
+      "date": "1 มีนาคม 2565",
+      "first_prize": "061905",
+      "front_three": [
+        "236",
+        "834"
+      ],
+      "last_three": [
+        "234",
+        "691"
+      ],
+      "last_two": "07"
+    },
+    {
+      "date": "17 กุมภาพันธ์ 2565",
+      "first_prize": "098597",
+      "front_three": [
+        "085",
+        "644"
+      ],
+      "last_three": [
+        "592",
+        "816"
+      ],
+      "last_two": "57"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2565",
+      "first_prize": "944308",
+      "front_three": [
+        "942",
+        "061"
+      ],
+      "last_three": [
+        "509",
+        "485"
+      ],
+      "last_two": "30"
+    },
+    {
+      "date": "17 มกราคม 2565",
+      "first_prize": "880159",
+      "front_three": [
+        "731",
+        "786"
+      ],
+      "last_three": [
+        "119",
+        "529"
+      ],
+      "last_two": "92"
+    },
+    {
+      "date": "30 ธันวาคม 2564",
+      "first_prize": "819068",
+      "front_three": [
+        "591",
+        "979"
+      ],
+      "last_three": [
+        "419",
+        "547"
+      ],
+      "last_two": "36"
+    },
+    {
+      "date": "16 ธันวาคม 2564",
+      "first_prize": "639235",
+      "front_three": [
+        "097",
+        "629"
+      ],
+      "last_three": [
+        "476",
+        "522"
+      ],
+      "last_two": "83"
+    },
+    {
+      "date": "1 ธันวาคม 2564",
+      "first_prize": "077258",
+      "front_three": [
+        "739",
+        "740"
+      ],
+      "last_three": [
+        "401",
+        "485"
+      ],
+      "last_two": "82"
+    },
+    {
+      "date": "16 พฤศจิกายน 2564",
+      "first_prize": "032761",
+      "front_three": [
+        "648",
+        "471"
+      ],
+      "last_three": [
+        "844",
+        "245"
+      ],
+      "last_two": "57"
+    },
+    {
+      "date": "1 พฤศจิกายน 2564",
+      "first_prize": "045037",
+      "front_three": [
+        "247",
+        "458"
+      ],
+      "last_three": [
+        "331",
+        "755"
+      ],
+      "last_two": "95"
+    },
+    {
+      "date": "16 ตุลาคม 2564",
+      "first_prize": "386372",
+      "front_three": [
+        "602",
+        "964"
+      ],
+      "last_three": [
+        "295",
+        "798"
+      ],
+      "last_two": "38"
+    },
+    {
+      "date": "1 ตุลาคม 2564",
+      "first_prize": "578171",
+      "front_three": [
+        "285",
+        "361"
+      ],
+      "last_three": [
+        "379",
+        "449"
+      ],
+      "last_two": "83"
+    },
+    {
+      "date": "16 กันยายน 2564",
+      "first_prize": "070935",
+      "front_three": [
+        "609",
+        "817"
+      ],
+      "last_three": [
+        "379",
+        "007"
+      ],
+      "last_two": "90"
+    },
+    {
+      "date": "1 กันยายน 2564",
+      "first_prize": "114475",
+      "front_three": [
+        "278",
+        "302"
+      ],
+      "last_three": [
+        "123",
+        "458"
+      ],
+      "last_two": "79"
+    },
+    {
+      "date": "16 สิงหาคม 2564",
+      "first_prize": "046750",
+      "front_three": [
+        "421",
+        "666"
+      ],
+      "last_three": [
+        "160",
+        "355"
+      ],
+      "last_two": "23"
+    },
+    {
+      "date": "1 สิงหาคม 2564",
+      "first_prize": "910261",
+      "front_three": [
+        "103",
+        "307"
+      ],
+      "last_three": [
+        "004",
+        "785"
+      ],
+      "last_two": "69"
+    },
+    {
+      "date": "16 กรกฎาคม 2564",
+      "first_prize": "556725",
+      "front_three": [
+        "058",
+        "174"
+      ],
+      "last_three": [
+        "233",
+        "927"
+      ],
+      "last_two": "70"
+    },
+    {
+      "date": "1 กรกฎาคม 2564",
+      "first_prize": "713517",
+      "front_three": [
+        "794",
+        "073"
+      ],
+      "last_three": [
+        "511",
+        "414"
+      ],
+      "last_two": "29"
+    },
+    {
+      "date": "16 มิถุนายน 2564",
+      "first_prize": "691861",
+      "front_three": [
+        "054",
+        "007"
+      ],
+      "last_three": [
+        "447",
+        "668"
+      ],
+      "last_two": "17"
+    },
+    {
+      "date": "1 มิถุนายน 2564",
+      "first_prize": "292972",
+      "front_three": [
+        "620",
+        "193"
+      ],
+      "last_three": [
+        "978",
+        "723"
+      ],
+      "last_two": "45"
+    },
+    {
+      "date": "16 พฤษภาคม 2564",
+      "first_prize": "684579",
+      "front_three": [
+        "615",
+        "843"
+      ],
+      "last_three": [
+        "276",
+        "970"
+      ],
+      "last_two": "14"
+    },
+    {
+      "date": "2 พฤษภาคม 2564",
+      "first_prize": "501272",
+      "front_three": [
+        "306",
+        "018"
+      ],
+      "last_three": [
+        "498",
+        "129"
+      ],
+      "last_two": "18"
+    },
+    {
+      "date": "16 เมษายน 2564",
+      "first_prize": "100787",
+      "front_three": [
+        "013",
+        "143"
+      ],
+      "last_three": [
+        "264",
+        "478"
+      ],
+      "last_two": "56"
+    },
+    {
+      "date": "1 เมษายน 2564",
+      "first_prize": "472270",
+      "front_three": [
+        "755",
+        "283"
+      ],
+      "last_three": [
+        "393",
+        "577"
+      ],
+      "last_two": "05"
+    },
+    {
+      "date": "16 มีนาคม 2564",
+      "first_prize": "890422",
+      "front_three": [
+        "036",
+        "902"
+      ],
+      "last_three": [
+        "396",
+        "256"
+      ],
+      "last_two": "19"
+    },
+    {
+      "date": "1 มีนาคม 2564",
+      "first_prize": "835538",
+      "front_three": [
+        "290",
+        "838"
+      ],
+      "last_three": [
+        "051",
+        "806"
+      ],
+      "last_two": "73"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2564",
+      "first_prize": "424603",
+      "front_three": [
+        "861",
+        "318"
+      ],
+      "last_three": [
+        "057",
+        "817"
+      ],
+      "last_two": "39"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2564",
+      "first_prize": "912307",
+      "front_three": [
+        "605",
+        "248"
+      ],
+      "last_three": [
+        "282",
+        "651"
+      ],
+      "last_two": "97"
+    },
+    {
+      "date": "17 มกราคม 2564",
+      "first_prize": "384395",
+      "front_three": [
+        "367",
+        "653"
+      ],
+      "last_three": [
+        "566",
+        "878"
+      ],
+      "last_two": "15"
+    },
+    {
+      "date": "30 ธันวาคม 2563",
+      "first_prize": "803628",
+      "front_three": [
+        "336",
+        "804"
+      ],
+      "last_three": [
+        "321",
+        "924"
+      ],
+      "last_two": "19"
+    },
+    {
+      "date": "16 ธันวาคม 2563",
+      "first_prize": "201303",
+      "front_three": [
+        "377",
+        "828"
+      ],
+      "last_three": [
+        "072",
+        "517"
+      ],
+      "last_two": "70"
+    },
+    {
+      "date": "1 ธันวาคม 2563",
+      "first_prize": "100994",
+      "front_three": [
+        "093",
+        "776"
+      ],
+      "last_three": [
+        "834",
+        "984"
+      ],
+      "last_two": "84"
+    },
+    {
+      "date": "16 พฤศจิกายน 2563",
+      "first_prize": "972661",
+      "front_three": [
+        "368",
+        "741"
+      ],
+      "last_three": [
+        "208",
+        "255"
+      ],
+      "last_two": "46"
+    },
+    {
+      "date": "1 พฤศจิกายน 2563",
+      "first_prize": "506404",
+      "front_three": [
+        "154",
+        "598"
+      ],
+      "last_three": [
+        "062",
+        "245"
+      ],
+      "last_two": "40"
+    },
+    {
+      "date": "16 ตุลาคม 2563",
+      "first_prize": "286051",
+      "front_three": [
+        "189",
+        "464"
+      ],
+      "last_three": [
+        "980",
+        "045"
+      ],
+      "last_two": "38"
+    },
+    {
+      "date": "1 ตุลาคม 2563",
+      "first_prize": "837893",
+      "front_three": [
+        "594",
+        "757"
+      ],
+      "last_three": [
+        "110",
+        "595"
+      ],
+      "last_two": "59"
+    },
+    {
+      "date": "16 กันยายน 2563",
+      "first_prize": "244083",
+      "front_three": [
+        "127",
+        "220"
+      ],
+      "last_three": [
+        "623",
+        "853"
+      ],
+      "last_two": "57"
+    },
+    {
+      "date": "1 กันยายน 2563",
+      "first_prize": "999997",
+      "front_three": [
+        "636",
+        "725"
+      ],
+      "last_three": [
+        "342",
+        "957"
+      ],
+      "last_two": "98"
+    },
+    {
+      "date": "16 สิงหาคม 2563",
+      "first_prize": "945811",
+      "front_three": [
+        "712",
+        "614"
+      ],
+      "last_three": [
+        "364",
+        "733"
+      ],
+      "last_two": "88"
+    },
+    {
+      "date": "1 สิงหาคม 2563",
+      "first_prize": "569391",
+      "front_three": [
+        "575",
+        "931"
+      ],
+      "last_three": [
+        "578",
+        "809"
+      ],
+      "last_two": "92"
+    },
+    {
+      "date": "16 กรกฎาคม 2563",
+      "first_prize": "873286",
+      "front_three": [
+        "510",
+        "533"
+      ],
+      "last_three": [
+        "682",
+        "494"
+      ],
+      "last_two": "53"
+    },
+    {
+      "date": "1 กรกฎาคม 2563",
+      "first_prize": "347258",
+      "front_three": [
+        "095",
+        "362"
+      ],
+      "last_three": [
+        "094",
+        "307"
+      ],
+      "last_two": "83"
+    },
+    {
+      "date": "16 มิถุนายน 2563",
+      "first_prize": "516967",
+      "front_three": [
+        "876",
+        "882"
+      ],
+      "last_three": [
+        "565",
+        "625"
+      ],
+      "last_two": "64"
+    },
+    {
+      "date": "1 มิถุนายน 2563",
+      "first_prize": "831567",
+      "front_three": [
+        "264",
+        "489"
+      ],
+      "last_three": [
+        "562",
+        "582"
+      ],
+      "last_two": "24"
+    },
+    {
+      "date": "16 พฤษภาคม 2563",
+      "first_prize": "051095",
+      "front_three": [
+        "285",
+        "430"
+      ],
+      "last_three": [
+        "191",
+        "364"
+      ],
+      "last_two": "22"
+    },
+    {
+      "date": "1 เมษายน 2563",
+      "first_prize": "051095",
+      "front_three": [
+        "285",
+        "430"
+      ],
+      "last_three": [
+        "191",
+        "364"
+      ],
+      "last_two": "22"
+    },
+    {
+      "date": "16 มีนาคม 2563",
+      "first_prize": "503446",
+      "front_three": [
+        "258",
+        "726"
+      ],
+      "last_three": [
+        "404",
+        "661"
+      ],
+      "last_two": "77"
+    },
+    {
+      "date": "1 มีนาคม 2563",
+      "first_prize": "875938",
+      "front_three": [
+        "294",
+        "328"
+      ],
+      "last_three": [
+        "597",
+        "780"
+      ],
+      "last_two": "98"
+    },
+    {
+      "date": "16 กุมภาพันธ์ 2563",
+      "first_prize": "781403",
+      "front_three": [
+        "515",
+        "952"
+      ],
+      "last_three": [
+        "030",
+        "918"
+      ],
+      "last_two": "94"
+    },
+    {
+      "date": "1 กุมภาพันธ์ 2563",
+      "first_prize": "589227",
+      "front_three": [
+        "259",
+        "552"
+      ],
+      "last_three": [
+        "375",
+        "927"
+      ],
+      "last_two": "06"
+    }
+  ]
 }
