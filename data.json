@@ -1,6 +1,6 @@
 {
   "status": "online",
-  "total_records": 160,
+  "total_records": 161,
   "history": [
     {
       "date": "1 พฤศจิกายน 2569",
@@ -2094,19 +2094,6 @@
         "927"
       ],
       "last_two": "06"
-    },
-    {
-      "date": "17 มกราคม 2563",
-      "first_prize": "491774",
-      "front_three": [
-        "004",
-        "132"
-      ],
-      "last_three": [
-        "379",
-        "595"
-      ],
-      "last_two": "68"
-    },
+    }
   ]
 }
